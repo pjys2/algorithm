@@ -25,6 +25,7 @@ public class boj_15684_사다리조작 {
 
         sadari = new int[M+1][N+1];
 
+        Ans = 3;
         for (int i = 0; i< M; i++){
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
@@ -39,26 +40,24 @@ public class boj_15684_사다리조작 {
 //            System.out.println("실패");
 //        }
 
-        System.out.println(solve());
+        for(int i = 0; i<=3;i++){
+            combination(0,1,i);
+            //combination(현재 선택한 사다리 개수, 사다리 위치, 선택할 수 있는 사다리 개수)
+        }
     }
 
-    private static int solve() {
-        for(int i = 0; i<=H;i++){
-            int addSadariCnt = i;
+    public static int Ans;
+    private static void combination(int selNum, int idx, int maxNum) {
+        if(selNum > Ans){
+            return;
+        }
 
-            List<Point> addSadariList = new ArrayList<>();
-
-//            addSadari();
-
-            if(sadariStart()){
-                return i;
-            }
-
+        if(selNum == maxNum){
 
         }
 
-        return -1;
     }
+
 
     private static boolean sadariStart() {
         for(int i =1; i<N+1;i++){
