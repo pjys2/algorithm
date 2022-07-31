@@ -14,6 +14,7 @@ public class boj_15684_사다리조작 {
         public Point(int r, int c){
             this.r=r;
             this.c=c;
+
         }
     }
     public static void main(String[] args) throws IOException {
