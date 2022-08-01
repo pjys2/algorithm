@@ -1,4 +1,4 @@
-package 백준모음;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-import 백준모음.백준_13460_구슬탈출2_v2.Point;
+
 
 public class 백준_7569_토마토 {
 

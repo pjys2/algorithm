@@ -17,6 +17,7 @@ public class boj_15684_사다리조작 {
 
         }
     }
+    public static List<Point> lineList;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -26,6 +27,7 @@ public class boj_15684_사다리조작 {
 
         sadari = new int[M+1][N+1];
 
+
         Ans = 3;
         for (int i = 0; i< M; i++){
             st = new StringTokenizer(br.readLine());
@@ -33,6 +35,23 @@ public class boj_15684_사다리조작 {
             int b = Integer.parseInt(st.nextToken());
             sadari[a][b] = 1;
         }
+
+        lineList = new ArrayList<Point>();
+
+        for(int i =1; i<=M;i++){
+            for(int j = 1; j<=N;j++){
+                if(sadari[i][j] == 1) continue;
+                lineList.add(new Point(i,j));
+            }
+        }
+
+
+
+        print();
+//        for(Point p : lineList){
+//            System.out.println("r : "+p.r+" c : "+p.c);
+//        }
+
 
 //        print();
 //        if(sadariStart()){
@@ -42,12 +61,14 @@ public class boj_15684_사다리조작 {
 //        }
 
         for(int i = 0; i<=3;i++){
+            select = new boolean[lineList.size()];
             combination(0,1,i);
             //combination(현재 선택한 사다리 개수, 사다리 위치, 선택할 수 있는 사다리 개수)
         }
     }
 
     public static int Ans;
+    public static boolean[] select;
     private static void combination(int selNum, int idx, int maxNum) {
         if(selNum > Ans){
             return;
