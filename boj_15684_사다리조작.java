@@ -27,7 +27,6 @@ public class boj_15684_사다리조작 {
 
         sadari = new int[M+1][N+1];
 
-
         Ans = 3;
         for (int i = 0; i< M; i++){
             st = new StringTokenizer(br.readLine());
@@ -45,8 +44,6 @@ public class boj_15684_사다리조작 {
             }
         }
 
-
-
         print();
 //        for(Point p : lineList){
 //            System.out.println("r : "+p.r+" c : "+p.c);
@@ -61,23 +58,26 @@ public class boj_15684_사다리조작 {
 //        }
 
         for(int i = 0; i<=3;i++){
-            select = new boolean[lineList.size()];
-            combination(0,1,i);
+
+            combination(new int[i],0,0);
             //combination(현재 선택한 사다리 개수, 사다리 위치, 선택할 수 있는 사다리 개수)
         }
     }
 
     public static int Ans;
     public static boolean[] select;
-    private static void combination(int selNum, int idx, int maxNum) {
-        if(selNum > Ans){
+    private static void combination(int[] sel, int idx, int k) {
+        if(k == sel.length){
+            for (int i =0; i<sel.length;i++){
+                System.out.print(sel[i]+" ");
+            }
+            System.out.println();
             return;
         }
-
-        if(selNum == maxNum){
-
+        for(int i = idx; i < lineList.size();i++){
+            sel[k] = idx;
+            combination(sel, i+1,k+1);
         }
-
     }
 
 
