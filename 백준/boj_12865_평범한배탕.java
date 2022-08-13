@@ -32,11 +32,11 @@ public class boj_12865_평범한배탕 {
     public static int solve(int[] W,int[] V, int N,int K){
 
         int[][] data = new int[N+1][K+1];
-        for(int k = 1; k<=K;k++){
-            for (int i = 1; i<=N;i++){
+        for(int k = 1; k <= K; k++){
+            for(int i = 1; i <= N; i++){
                 data[i][k] = data[i-1][k];
-                if(k >= W[i]){
-                    data[i][k] = Math.max(data[i][k], data[i-1][k-W[i]] + V[i]);
+                if(k > W[i]){
+                    data[i][k] = Math.max(data[i][k],data[i-1][k-W[i]]+V[i]);
                 }
             }
         }
