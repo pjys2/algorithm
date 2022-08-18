@@ -9,13 +9,12 @@ public class boj_24513_좀비바이러스 {
     public static int[] dr = {0,0,1,-1};
     public static int[] dc = {1,-1,0,0};
     public static class Point{
-        int r, c, num;
+        int r, c;
         public Point(){};
 
-        public Point(int r, int c, int num){
+        public Point(int r, int c){
             this.r = r;
             this.c = c;
-            this.num = num;
         };
 
     }
@@ -41,7 +40,7 @@ public class boj_24513_좀비바이러스 {
 
 
         bfs(queue, visited);
-        print(map,N,M);
+//        print(map,N,M);
 
         int[] countNum = new int[3];
         for (int i = 0; i<N;i++){
@@ -63,19 +62,26 @@ public class boj_24513_좀비바이러스 {
     }
 
     public static void bfs(Queue<Point> queue,boolean[][] visited){
-        int cnt = 0;
+        List<Point> dontMove = new LinkedList<Point>();
         while(!queue.isEmpty()){
             int size = queue.size();
-            cnt++;
-            for(int i = 0; i<size;i++){
+            loop:for(int i = 0; i<size;i++){
                 Point current = queue.poll();
+                for (Point list : dontMove){
+                    if(!dontMove.isEmpty() && current.r == list.r && current.c == list.c){
+//                        System.out.println(current.r +" "+ current.c);
+                        dontMove.remove(list);
+                        continue loop;
+                    }
+                }
                 for(int d = 0; d<4;d++){
                     int nr = current.r + dr[d];
                     int nc = current.c + dc[d];
                     if(nr >=0 && nr < N && nc >=0 && nc<M){
                         if((map[nr][nc] == 1  && map[current.r][current.c] == 2)|| (map[nr][nc] == 2 && map[current.r][current.c] == 1)) {
                             map[nr][nc] = 3;
-                        }else if(!visited[nr][nc] && map[nr][nc] != 3){
+                            dontMove.add(new Point(nr,nc));
+                        }else if(!visited[nr][nc] && map[nr][nc] != 3 && map[nr][nc]!=-1){
                             map[nr][nc] = map[current.r][current.c];
                             queue.offer(new Point(nr,nc));
                             visited[nr][nc] = true;
