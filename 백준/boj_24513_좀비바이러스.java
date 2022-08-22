@@ -41,7 +41,7 @@ public class boj_24513_좀비바이러스 {
 
 
         bfs(queue, visited);
-        print(map,N,M);
+//        print(map,N,M);
 
         int[] countNum = new int[3];
         for (int i = 0; i<N;i++){
@@ -86,7 +86,7 @@ public class boj_24513_좀비바이러스 {
                     int nr = current.r + dr[d];
                     int nc = current.c + dc[d];
                     if(nr >=0 && nr < N && nc >=0 && nc<M){
-                        if(((map[nr][nc][0] == 1  && map[current.r][current.c][0] == 2)|| (map[nr][nc][0] == 2 && map[current.r][current.c][0] == 1)) &&   map[nr][nc][1] == current.time ) {
+                        if(((map[nr][nc][0] == 1  && map[current.r][current.c][0] == 2)|| (map[nr][nc][0] == 2 && map[current.r][current.c][0] == 1)) && map[nr][nc][1] == map[current.r][current.c][1]+1 ) {
                             map[nr][nc][0] = 3;
                             dontMove.add(new Point(nr,nc,time));
                         }else if(!visited[nr][nc] && map[nr][nc][0] != 3 && map[nr][nc][0]!=-1){
@@ -99,8 +99,6 @@ public class boj_24513_좀비바이러스 {
                 }
             }
         }
-
-
     }
 
     public static void print(int[][][] map,int N,int M){
