@@ -1,15 +1,15 @@
 package 백준;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class boj_15686_치킨배달 {
 
-    public static int N,M;
+    public static int N,M,ans;
     public static int[][] map;
     public static List<Point> homeList;
+    public static int[] dr = {1,-1,0,0};
+    public static int[] dc = {0,0,1,-1};
     public static class Point{
         int r, c;
 
@@ -24,6 +24,7 @@ public class boj_15686_치킨배달 {
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
+        ans = 99999;
         map = new int[N+1][N+1];
         int cnt = 0;
         homeList = new ArrayList<Point>();
@@ -42,13 +43,23 @@ public class boj_15686_치킨배달 {
 
         solve(0,cnt-M);
 
-
-        print();
+        System.out.println(ans);
+//        print();
     }
 
     public static void solve(int k, int end){
         if(k == end){
-            sumDistance();
+            int sum = 0;
+            for(Point home : homeList){
+                sum += sumDistance(home);
+                if(sum > ans){
+                    return;
+                }
+            }
+
+            if(sum < ans){
+                ans = sum;
+            }
             return;
         }
 
@@ -63,11 +74,35 @@ public class boj_15686_치킨배달 {
         }
     }
 
-    private static void sumDistance() {
-        for(Point home : homeList){
-            
+    private static int sumDistance(Point home) {
+        int distance = 0;
+        Queue<Point> queue = new LinkedList<Point>();
+        queue.offer(home);
+        boolean[][] visited = new boolean[N+1][N+1];
+        visited[home.r][home.c] = true;
+        loop : while(!queue.isEmpty()){
+            int size = queue.size();
+            distance++;
+            for(int s = 0; s < size; s++){
+                Point current = queue.poll();
+
+                for(int d = 0; d<4;d++){
+                    int nr = current.r +dr[d];
+                    int nc = current.c +dc[d];
+                    if(nr >= 1 && nr <=N && nc >= 1 && nc <= N && !visited[nr][nc]){
+                        if(map[nr][nc] == 2){
+                            break loop;
+                        }
+
+                        queue.offer(new Point(nr,nc));
+                        visited[nr][nc] = true;
+                    }
+                }
+            }
         }
 
+
+        return distance;
     }
 
     public static void print(){
