@@ -1,6 +1,7 @@
 package 백준;
 
 import java.io.*;
+import java.sql.Array;
 import java.util.*;
 
 public class boj_15686_치킨배달 {
@@ -8,6 +9,8 @@ public class boj_15686_치킨배달 {
     public static int N,M,ans;
     public static int[][] map;
     public static List<Point> homeList;
+    public static List<Point> chickList;
+    public static boolean[] open;
     public static int[] dr = {1,-1,0,0};
     public static int[] dc = {0,0,1,-1};
     public static class Point{
@@ -26,29 +29,32 @@ public class boj_15686_치킨배달 {
         M = Integer.parseInt(st.nextToken());
         ans = 99999;
         map = new int[N+1][N+1];
+
         int cnt = 0;
         homeList = new ArrayList<Point>();
+        chickList = new ArrayList<Point>();
         for (int r = 1; r <= N; r++){
             st = new StringTokenizer(br.readLine());
             for(int c = 1; c <= N; c++){
                 map[r][c] = Integer.parseInt(st.nextToken());
                 if(map[r][c] == 2){
                     cnt++;
+                    chickList.add(new Point(r,c));
                 }else if(map[r][c] == 1){
                     homeList.add(new Point(r,c));
                 }
             }
         }
 
-
-        solve(0,cnt-M);
+        open = new boolean[chickList.size()];
+        solve(0,0);
 
         System.out.println(ans);
 //        print();
     }
 
-    public static void solve(int k, int end){
-        if(k == end){
+    public static void solve(int k,int idx){
+        if(k == M){
             int sum = 0;
             for(Point home : homeList){
                 sum += sumDistance(home);
@@ -63,45 +69,25 @@ public class boj_15686_치킨배달 {
             return;
         }
 
-        for (int r = 1; r <= N; r++){
-            for(int c = 1; c <= N; c++){
-                if(map[r][c] == 2){
-                    map[r][c] = 0;
-                    solve(k+1,end);
-                    map[r][c] = 2;
-                }
-            }
+        for (int i = idx; i < chickList.size(); i++){
+            open[i] = true;
+            solve(k+1,i+1);
+            open[i] = false;
         }
     }
 
     private static int sumDistance(Point home) {
         int distance = 0;
-        Queue<Point> queue = new LinkedList<Point>();
-        queue.offer(home);
-        boolean[][] visited = new boolean[N+1][N+1];
-        visited[home.r][home.c] = true;
-        loop : while(!queue.isEmpty()){
-            int size = queue.size();
-            distance++;
-            for(int s = 0; s < size; s++){
-                Point current = queue.poll();
 
-                for(int d = 0; d<4;d++){
-                    int nr = current.r +dr[d];
-                    int nc = current.c +dc[d];
-                    if(nr >= 1 && nr <=N && nc >= 1 && nc <= N && !visited[nr][nc]){
-                        if(map[nr][nc] == 2){
-                            break loop;
-                        }
-
-                        queue.offer(new Point(nr,nc));
-                        visited[nr][nc] = true;
+            for(int i = 0; i<chickList.size();i++){
+                if(open[i]){
+                    if(distance == 0){
+                        distance = Math.abs(home.r- chickList.get(i).r) + Math.abs(home.c - chickList.get(i).c);
+                    }else{
+                        distance = Math.min(distance, Math.abs(home.r- chickList.get(i).r) + Math.abs(home.c - chickList.get(i).c));
                     }
                 }
             }
-        }
-
-
         return distance;
     }
 
