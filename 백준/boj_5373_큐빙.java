@@ -65,7 +65,7 @@ public class boj_5373_큐빙 {
                     char temp = cube[1][0][i];
                     cube[1][0][i] = cube[0][0][i];
                     cube[0][0][i] = cube[4][0][i];
-                    cube[4][0][i] = cube[]
+
                 }
                 char[] tempArray = cube[1][0];
                 cube[1][0] = cube[3][0];
