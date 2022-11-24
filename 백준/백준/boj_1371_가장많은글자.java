@@ -38,11 +38,6 @@ public class boj_1371_가장많은글자 {
 
         }
 
-        for(int d = 0;  < 26; i++) {
-            if (max == arr[i]) {
-                System.out.print((char) (i + 'a'));
-            }
-        }
 
 //        System.out.println(Arrays.toString(arr));
 
