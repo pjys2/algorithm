@@ -59,13 +59,12 @@ public class boj_16235_나무재태크 {
             int y = Integer.parseInt(st.nextToken());
             int z = Integer.parseInt(st.nextToken());
 
-            treeList.offer(new Tree(x,y,z));
+            treeList.add(new Tree(x,y,z));
         }
 
 
 
         for(int i = 0; i<K;i++){
-
             spring(treeList,deathTree);
             summer(deathTree);
             fall(treeList);
@@ -92,7 +91,8 @@ public class boj_16235_나무재태크 {
     }
 
     public static void summer(Queue<Tree> deathTree){
-        for (int i = 0; i<deathTree.size();i++){
+        int size = deathTree.size();
+        for (int i = 0; i<size;i++){
             Tree tree = deathTree.poll();
             map[tree.r][tree.c] += tree.age/2;
         }
@@ -115,7 +115,7 @@ public class boj_16235_나무재태크 {
             }
         }
 
-        for (Tree tree : addList){
+        for(Tree tree : addList){
             treeList.addFirst(tree);
         }
 
