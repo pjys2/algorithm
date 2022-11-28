@@ -70,6 +70,7 @@ public class boj_17140_이차원배열과연산 {
                 break;
             }
         }
+
         System.out.println(N);
     }
 
