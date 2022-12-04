@@ -87,6 +87,8 @@ public class boj_17837_새로운게임2 {
                             move(firstUnit,nr,nc);
                         }else{
                             Unit firstUnit = reverse(units[k], units[k]);
+
+                            //Unit에 번호 추가
                             for (int n = 1; n<=K;n++){
                                 if(units[n] == firstUnit){
                                     state[nr][nc] = n;
@@ -96,6 +98,19 @@ public class boj_17837_새로운게임2 {
 
                         }
                     }else if(map[nr][nc] == 2){
+                        if(units[k].dir == 1){
+                            units[k].dir = 2;
+                        }else if(units[k].dir == 2){
+                            units[k].dir = 1;
+                        }else if(units[k].dir == 3){
+                            units[k].dir = 4;
+                        }else if(units[k].dir == 4){
+                            units[k].dir = 3;
+                        }
+
+                        if(units[k].isBlue) continue;
+                        units[k].isBlue = true;
+                        //방향 돌리고 범위 판단 필요
                         if(state[nr][nc] != 0){
 
                         }else{
