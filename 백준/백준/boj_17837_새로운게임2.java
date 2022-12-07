@@ -120,29 +120,28 @@ public class boj_17837_새로운게임2 {
                         }
                     }
 
-                }else{
-                    if(units[k].dir == 1){
+                }else {
+                    if (units[k].dir == 1) {
                         units[k].dir = 2;
-                    }else if(units[k].dir == 2){
+                    } else if (units[k].dir == 2) {
                         units[k].dir = 1;
-                    }else if(units[k].dir == 3){
+                    } else if (units[k].dir == 3) {
                         units[k].dir = 4;
-                    }else if(units[k].dir == 4){
+                    } else if (units[k].dir == 4) {
                         units[k].dir = 3;
                     }
 
-                    if(units[k].isBlue) continue;
+                    if (units[k].isBlue) continue;
                     units[k].isBlue = true;
                     //방향 돌리고 범위 판단 필요
-                    if(state[nr][nc] != 0){
-                        move(units[k],nr,nc);
-                    }else{
+                    if (state[nr][nc] != 0) {
+                        move(units[k], nr, nc);
+                    } else {
                         state[nr][nc] = k;
                         cut(units[state[units[k].r][units[k].c]], units[k]);
-                        move(units[k],nr,nc);
+                        move(units[k], nr, nc);
                     }
                 }
-
             }
 
         }
