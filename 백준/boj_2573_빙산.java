@@ -38,7 +38,7 @@ public class boj_2573_빙산 {
                 map[r][c] = Integer.parseInt(st.nextToken());
             }
         }
-
+        //입력
         int time = 0;
         while(isEnd()){
             int[][] connect = new int[N][M];
@@ -59,6 +59,7 @@ public class boj_2573_빙산 {
                 System.out.println(time);
                 break;
             }
+
             next();
             time++;
         }
@@ -88,6 +89,7 @@ public class boj_2573_빙산 {
         for (int r = 0; r<N;r++){
             for (int c = 0; c<M;c++){
                 int count = 0;
+                if(map[r][c] == 0) continue;
                 for (int d = 0; d<4;d++){
                     int nr = r+dr[d];
                     int nc = c+dc[d];
