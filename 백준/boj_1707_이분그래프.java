@@ -58,6 +58,11 @@ public class boj_1707_이분그래프 {
     }
 
     public static void DFS(int v, int number){
-        for (Node temp = nodeList[v];temp = nodeList[v].node;)
+        for (Node temp = nodeList[v]; temp != null; temp = temp.node){
+            if(connect[temp.num] == 0){
+                connect[temp.num] = number;
+                DFS(temp.num, number);
+            }
+        }
     }
 }
