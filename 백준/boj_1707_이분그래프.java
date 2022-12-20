@@ -6,6 +6,7 @@ import com.sun.org.apache.xpath.internal.objects.XNumber;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class boj_1707_이분그래프 {
@@ -40,27 +41,47 @@ public class boj_1707_이분그래프 {
 
             }
 
-            int number = 0;
+
             for (int v = 1; v<=V;v++){
                 if(connect[v] != 0) continue;
 
-                DFS(v, number);
-                number++;
+                DFS(v, 1);
+
             }
 
+            boolean isPossible = true;
 
-            if(number == 2){
+            for (int i = 1; i < connect.length;i++){
+                if(connect[i] == 0 || connect[i] == -1){
+                    isPossible = false;
+                    break;
+                }
+            }
+
+            if(isPossible){
                 System.out.println("YES");
             }else{
                 System.out.println("NO");
             }
+
+
         }
     }
 
     public static void DFS(int v, int number){
+        connect[v] = number;
+        if(number == 1){
+            number = 2;
+        }else{
+            number = 1;
+        }
+
         for (Node temp = nodeList[v]; temp != null; temp = temp.node){
+            if( (number == 1 && connect[temp.num] == 2) || (number == 2 && connect[temp.num] == 1)){
+                connect[temp.num] = -1;
+            }
+
             if(connect[temp.num] == 0){
-                connect[temp.num] = number;
                 DFS(temp.num, number);
             }
         }
