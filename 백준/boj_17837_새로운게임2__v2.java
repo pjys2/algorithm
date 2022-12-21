@@ -185,9 +185,9 @@ public class boj_17837_새로운게임2__v2 {
                     System.out.println(i);
                     break loop;
                 }
-                System.out.println(horseList.indexOf(horse)+1);
-                print(state);
-                System.out.println("--------------------------------");
+//                System.out.println(horseList.indexOf(horse)+1);
+//                print(state);
+//                System.out.println("--------------------------------");
             }
 
         }
