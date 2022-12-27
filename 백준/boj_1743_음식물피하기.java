@@ -32,18 +32,20 @@ public class boj_1743_음식물피하기 {
         }
 
 
-        int number = 0;
+        int number = 1;
         List<Integer> ansList = new ArrayList<>();
         for (int r = 1; r<=N;r++){
+            count = 0;
             for (int c = 1; c<=M;c++){
                 if(connect[r][c] != 0 || map[r][c] != '#')continue;
-                count = 0;
+                connect[r][c] = number;
                 DFS(r,c,number);
+
                 number++;
                 ansList.add(count);
+
             }
         }
-        System.out.println(ansList.toString());
         Collections.reverse(ansList);
 
         System.out.println(ansList.get(0));
@@ -61,6 +63,15 @@ public class boj_1743_음식물피하기 {
                 connect[nr][nc] = number;
                 DFS(nr,nc, number);
             }
+        }
+    }
+
+    public static void print(){
+        for (int r = 1; r<=N;r++){
+            for (int c = 1; c<=M;c++){
+                System.out.print(connect[r][c]+" ");
+            }
+            System.out.println();
         }
     }
 }
