@@ -42,15 +42,18 @@ public class boj_2638_치즈 {
             findAir(new Point(0,0));
             delete();
             time++;
+
         }
         System.out.println(time);
     }
     public static void delete(){
         List<Point> delList = new ArrayList<Point>();
         for (int r = 0; r<N;r++){
-            int count = 0;
+
             for (int c = 0; c<M;c++){
                 if(map[r][c] != 1) continue;
+                int count = 0;
+
                 for (int d = 0; d<4;d++){
                     int nr = r+dr[d];
                     int nc = c+dc[d];
