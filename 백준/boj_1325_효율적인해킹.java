@@ -13,11 +13,10 @@ import java.util.StringTokenizer;
 
 public class boj_1325_효율적인해킹 {
     public static int N, M;
-
-    public static int[][] pc;
+    public static boolean[] visited;
     public static int count;
     public static int[] counts;
-
+    public static Node[] nodeList;
     public static class Node{
         int num;
         Node node;
@@ -33,26 +32,28 @@ public class boj_1325_효율적인해킹 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        pc = new int[N+1][N+1];
+        nodeList = new Node[N+1];
         counts = new int[N+1];
+
 
         for (int i = 0; i<M;i++){
             st = new StringTokenizer(br.readLine());
             int to = Integer.parseInt(st.nextToken());
             int from = Integer.parseInt(st.nextToken());
 
-            pc[from][to] = 1;
+            nodeList[from] = new Node(to, nodeList[from]);
         }
 
 
         int max = 0;
-        for (int r = 1; r<= N;r++){
+        for (int num = 1; num<= N;num++){
+            visited = new boolean[N+1];
             count = 0;
-            DFS(r);
-            counts[r] = count;
+            DFS(num);
+            counts[num] = count;
 
-            if(max < counts[r]){
-                max = counts[r];
+            if(max < counts[num]){
+                max = counts[num];
             }
         }
 
@@ -69,12 +70,15 @@ public class boj_1325_효율적인해킹 {
     }
 
 
-    public static void DFS(int r){
-        for (int c = 1; c<=N;c++){
-            if (pc[r][c] == 1){
-                count++;
-                DFS(c);
-            }
+    public static void DFS(int num){
+
+        visited[num] = true;
+
+        for (Node temp = nodeList[num];temp != null; temp = temp.node){
+            if(visited[temp.num]) continue;
+            count++;
+            DFS(temp.num);
         }
+
     }
 }
