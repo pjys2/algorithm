@@ -12,17 +12,18 @@ public class boj_2668_숫자고르기 {
 
     public static int N,count;
     public static boolean[] visited;
-    public static int[][] selectSet;
-    public static int[][] select;
+    public static boolean[][] select;
     public static int[] numList;
+    public static List<Integer> subList;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         N = Integer.parseInt(br.readLine());
         numList = new int[N+1];
-        selectSet = new int[2][N+1];
+        boolean[][] selectSet = new boolean[2][N+1];
         boolean[] visitSet = new boolean[N+1];
         int countSet = 0;
+        List<Integer> ansList = new ArrayList<Integer>();
         for (int i = 1; i <= N; i++){
             int number = Integer.parseInt(br.readLine());
             numList[i] = number;
@@ -30,28 +31,39 @@ public class boj_2668_숫자고르기 {
             if(number == i){
                 countSet++;
                 visitSet[i] = true;
-                select[0][i] = number;
-                select[1][i] = number;
+                selectSet[0][i] = true;
+                selectSet[1][i] = true;
             }
-
         }
-
+        int max = 0;
         for (int i = 1; i<=N;i++){
             visited = visitSet;
             count = countSet;
             select = selectSet;
+            subList = new ArrayList<Integer>();
             DFS(i);
+
+            if(IsEqual()){
+                if(count > max){
+                    max = count;
+                }
+            }
+
         }
+
+
 
     }
 
 
     public static void DFS(int i){
         count++;
+        subList.add(i);
         if(!visited[numList[i]]){
+            select[0][i] = true;
+            select[1][numList[i]] = true;
             DFS(i);
         }
-
     }
 
     public static boolean IsEqual(){
