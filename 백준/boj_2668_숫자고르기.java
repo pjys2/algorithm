@@ -31,7 +31,7 @@ public class boj_2668_숫자고르기 {
                 countSet++;
                 visitSet[i] = true;
                 selectSet[0][i] = true;
-                selectSet[1][i] = true;
+                selectSet[1][number] = true;
             }
         }
         int max = 0;
@@ -66,9 +66,9 @@ public class boj_2668_숫자고르기 {
     public static void DFS(int i){
         count++;
         visited[i] = true;
+        select[0][i] = true;
+        select[1][numList[i]] = true;
         if(!visited[numList[i]]){
-            select[0][i] = true;
-            select[1][numList[i]] = true;
             DFS(numList[i]);
         }
     }
