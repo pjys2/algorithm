@@ -41,7 +41,9 @@ public class boj_2589_보물섬 {
 
         for (int r = 0; r<R;r++){
             for (int c = 0; c<C;c++){
-                BFS(new Point(r,c));
+                if(map[r][c] == 'L'){
+                    BFS(new Point(r,c));
+                }
             }
         }
 
@@ -54,7 +56,7 @@ public class boj_2589_보물섬 {
         queue.offer(start);
         boolean[][] visited = new boolean[R][C];
         visited[start.r][start.c] = true;
-        int length = 1;
+        int length = 0;
         while(!queue.isEmpty()){
             int size = queue.size();
 
