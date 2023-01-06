@@ -54,7 +54,7 @@ public class boj_2589_보물섬 {
         queue.offer(start);
         boolean[][] visited = new boolean[R][C];
         visited[start.r][start.c] = true;
-        int length = 0;
+        int length = 1;
         while(!queue.isEmpty()){
             int size = queue.size();
 
