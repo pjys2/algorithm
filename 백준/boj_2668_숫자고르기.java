@@ -34,6 +34,15 @@ public class boj_2668_숫자고르기 {
                 selectSet[1][number] = true;
             }
         }
+
+        for (int i = 0; i<2;i++){
+            for (int j = 0; j < selectSet[i].length;j++){
+                System.out.print(selectSet[i][j]+" ");
+            }
+            System.out.println();
+        }
+
+        System.out.println("----------");
         int max = 0;
         for (int i = 1; i<=N;i++){
             visited = visitSet;
