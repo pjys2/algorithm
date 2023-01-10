@@ -12,6 +12,7 @@ public class boj_2210_숫자판점프 {
     public static int[] dr = {0,0,1,-1};
     public static int[] dc = {1,-1,0,0};
     public static int[][] board;
+    public static Map<Integer,Integer> numList;
 
     public static class Point{
         int r, c;
@@ -35,22 +36,36 @@ public class boj_2210_숫자판점프 {
         }
 
 
-        Map<Integer,Integer> numList = new HashMap<>();
+        numList = new HashMap<>();
+
 
         for (int r = 0; r<5;r++){
             for (int c = 0; c<5;c++){
-                DFS(new Point(r,c), 0);
+                DFS(new Point(r,c), 0, board[r][c]);
+
             }
         }
+
+        System.out.println(numList.size());
+
     }
 
-    public static void DFS(Point point, int cnt){
+    public static void DFS(Point point, int cnt,int result){
 
+        if(cnt == 5){
+           numList.put(result,1);
+            return;
+        }
+
+        result *= 10;
 
         for (int d = 0; d<4;d++){
             int nr = point.r+dr[d];
             int nc = point.c+dc[d];
-            if(nr >= 0 && nr <5 && nc >= 0 && nc <5){
+            if(nr >= 0 && nr <5 && nc >= 0 && nc < 5 ){
+
+
+                DFS(new Point(nr,nc),cnt+1,result+board[nr][nc]);
 
             }
         }
