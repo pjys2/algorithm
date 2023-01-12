@@ -9,6 +9,7 @@ public class boj_9466_텀프로젝트 {
     public static int N, count;
     public static int[] students;
     public static boolean[] visited;
+    public static boolean[] checked;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = Integer.parseInt(br.readLine());
@@ -18,6 +19,7 @@ public class boj_9466_텀프로젝트 {
 
             students = new int[N+1];
             visited = new boolean[N+1];
+            checked = new boolean[N+1];
             count = 0;
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int i = 1; i<=N;i++){
@@ -37,8 +39,14 @@ public class boj_9466_텀프로젝트 {
     }
 
     public static void DFS(int start, int target){
+//        if(checked[start]){
+//            return;
+//        }
+
         if (students[start] == target){
+            checked[target] = true;
             count++;
+            return;
         }
 
         if(!visited[students[start]]){
