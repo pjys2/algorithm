@@ -3,6 +3,9 @@ package 백준;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 public class boj_9466_텀프로젝트 {
@@ -10,6 +13,7 @@ public class boj_9466_텀프로젝트 {
     public static int[] students;
     public static boolean[] visited;
     public static boolean[] checked;
+    public static Set<Integer> ansList;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = Integer.parseInt(br.readLine());
@@ -27,32 +31,28 @@ public class boj_9466_텀프로젝트 {
             }
 
             for (int i = 1; i<=N;i++){
-                visited[i] = true;
-                DFS(i,i);
-                visited[i] = false;
+                if(visited[i]){
+                    DFS(i,new ArrayList<>());
+                }
             }
 
 
-            System.out.println(N-count);
+
+            System.out.println(N);
         }
 
     }
 
-    public static void DFS(int start, int target){
-//        if(checked[start]){
-//            return;
-//        }
+    public static void DFS(int start, List<Integer> idxList){
+        visited[start] = true;
+        idxList.add(start);
 
-        if (students[start] == target){
-            checked[target] = true;
-            count++;
-            return;
-        }
 
         if(!visited[students[start]]){
-            visited[students[start]] = true;
-            DFS(students[start],target);
-            visited[students[start]] = false;
+            DFS(students[start],idxList);
+        }else{
+            System.out.println("길이 : " + idxList.size());
+            return;
         }
     }
 }
