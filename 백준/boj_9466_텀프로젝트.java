@@ -13,7 +13,7 @@ public class boj_9466_텀프로젝트 {
     public static int[] students;
     public static boolean[] visited;
     public static boolean[] checked;
-    public static Set<Integer> ansList;
+    
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = Integer.parseInt(br.readLine());
@@ -27,23 +27,24 @@ public class boj_9466_텀프로젝트 {
             count = 0;
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int i = 1; i<=N;i++){
-                   students[i] = Integer.parseInt(st.nextToken());
+                students[i] = Integer.parseInt(st.nextToken());
             }
 
             for (int i = 1; i<=N;i++){
-                if(visited[i]){
-                    DFS(i,new ArrayList<>());
-                }
+                DFS(i,new ArrayList<>());
             }
 
 
 
-            System.out.println(N);
+            System.out.println(N-count);
         }
 
     }
 
     public static void DFS(int start, List<Integer> idxList){
+        if(visited[start]) return;
+
+
         visited[start] = true;
         idxList.add(start);
 
@@ -51,8 +52,12 @@ public class boj_9466_텀프로젝트 {
         if(!visited[students[start]]){
             DFS(students[start],idxList);
         }else{
-            System.out.println("길이 : " + idxList.size());
-            return;
+            if (!checked[students[start]]){
+
+                count += idxList.size();
+            }
         }
+
+        checked[start] = true;
     }
 }
