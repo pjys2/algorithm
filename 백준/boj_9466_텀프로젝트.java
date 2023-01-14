@@ -31,7 +31,10 @@ public class boj_9466_텀프로젝트 {
             }
 
             for (int i = 1; i<=N;i++){
-                DFS(i,new ArrayList<>());
+                if(!visited[i]){
+                    DFS(i,new ArrayList<>());
+
+                }
             }
 
 
@@ -42,9 +45,6 @@ public class boj_9466_텀프로젝트 {
     }
 
     public static void DFS(int start, List<Integer> idxList){
-        if(visited[start]) return;
-
-
         visited[start] = true;
         idxList.add(start);
 
