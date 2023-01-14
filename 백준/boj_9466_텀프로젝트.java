@@ -13,7 +13,7 @@ public class boj_9466_텀프로젝트 {
     public static int[] students;
     public static boolean[] visited;
     public static boolean[] checked;
-    
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = Integer.parseInt(br.readLine());
@@ -53,11 +53,14 @@ public class boj_9466_텀프로젝트 {
             DFS(students[start],idxList);
         }else{
             if (!checked[students[start]]){
-
                 count += idxList.size();
+                for (int num : idxList){
+                    checked[num] = true;
+                }
+
             }
         }
 
-        checked[start] = true;
+
     }
 }
