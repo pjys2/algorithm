@@ -31,38 +31,34 @@ public class boj_9466_텀프로젝트 {
             }
 
             for (int i = 1; i<=N;i++){
-                if(!visited[i]){
+                if(!checked[i]){
                     DFS(i);
-
                 }
             }
-
-
 
             System.out.println(N-count);
         }
 
     }
 
-    public static void DFS(int start){
-        if (checked[start]) return;
+    public static void DFS(int idx){
 
-        visited[start] = true;
+        visited[idx] = true;
+        int next = students[idx];
 
 
-
-        if(!visited[students[start]]){
-            DFS(students[start]);
+        if(!visited[next]){
+            DFS(next);
         }else{
-            count++;
-            for (int i = students[start]; i != start; i = students[i] ){
+            if(!checked[next]){
                 count++;
-                checked[i] = true;
+                for (int i = next; i != idx; i = students[i]){
+                    count++;
+                }
             }
-            return;
         }
+        checked[idx] = true;
 
-        checked[start] = true;
 
 
     }
