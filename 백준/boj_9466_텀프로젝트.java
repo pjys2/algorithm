@@ -32,7 +32,7 @@ public class boj_9466_텀프로젝트 {
 
             for (int i = 1; i<=N;i++){
                 if(!visited[i]){
-                    DFS(i,new ArrayList<>());
+                    DFS(i);
 
                 }
             }
@@ -44,22 +44,25 @@ public class boj_9466_텀프로젝트 {
 
     }
 
-    public static void DFS(int start, List<Integer> idxList){
+    public static void DFS(int start){
+        if (checked[start]) return;
+
         visited[start] = true;
-        idxList.add(start);
+
 
 
         if(!visited[students[start]]){
-            DFS(students[start],idxList);
+            DFS(students[start]);
         }else{
-            if (!checked[students[start]]){
-                count += idxList.size();
-                for (int num : idxList){
-                    checked[num] = true;
-                }
-
+            count++;
+            for (int i = students[start]; i != start; i = students[i] ){
+                count++;
+                checked[i] = true;
             }
+            return;
         }
+
+        checked[start] = true;
 
 
     }
