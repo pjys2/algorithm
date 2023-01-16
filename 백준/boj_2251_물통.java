@@ -16,5 +16,6 @@ public class boj_2251_물통 {
         C = Integer.parseInt(st.nextToken());
 
 
+
     }
 }
