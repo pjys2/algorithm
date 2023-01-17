@@ -5,10 +5,6 @@ import com.sun.xml.internal.bind.v2.model.core.EnumLeafInfo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.DateFormatSymbols;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class boj_1325_효율적인해킹 {
@@ -31,10 +27,15 @@ public class boj_1325_효율적인해킹 {
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
+        nodeList = new Node[N+1];
+
+        for (int i = 1; i <= M; i++){
+
+        }
 
 
 
     }
 
-    
+
 }
