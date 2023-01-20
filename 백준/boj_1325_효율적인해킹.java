@@ -1,16 +1,15 @@
 package 백준;
 
-import com.sun.xml.internal.bind.v2.model.core.EnumLeafInfo;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class boj_1325_효율적인해킹 {
     public static int N, M;
-    public static boolean[] visited;
     public static int[] counts;
     public static ArrayList<Integer>[] computerList;
     public static void main(String[] args) throws IOException{
@@ -22,7 +21,7 @@ public class boj_1325_효율적인해킹 {
         computerList = new ArrayList[N+1];
         counts = new int[N+1];
 
-        for (int i = 1; i <= M; i++){
+        for (int i = 1; i <= N; i++){
             computerList[i] = new ArrayList<>();
         }
 
@@ -30,21 +29,28 @@ public class boj_1325_효율적인해킹 {
             st = new StringTokenizer(br.readLine());
             int A = Integer.parseInt(st.nextToken());
             int B = Integer.parseInt(st.nextToken());
-            computerList[B].add(A);
+            computerList[A].add(B);
         }
-
 
         int max = 0;
 
-        for (int i = 1; i<=N;i++){
-            visited = new boolean[N+1];
-            visited[i] = true;
-            DFS(i);
 
-            if(max < counts[i]){
-                max = counts[i];
-            }
+        for (int i = 1; i<=N;i++){
+            BFS(i);
+
+//            max = Math.max(max, counts[i]);
+
         }
+
+
+
+        for (int i = 1; i<=N;i++){
+            max = Math.max(max, counts[i]);
+        }
+
+
+
+
         StringBuilder sb = new StringBuilder();
 
         for (int i = 1; i<=N;i++){
@@ -54,15 +60,23 @@ public class boj_1325_효율적인해킹 {
         }
 
         System.out.println(sb);
-
     }
 
-    public static void DFS(int idx){
+    public static void BFS(int idx){
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[N+1];
+        visited[idx] = true;
+        queue.add(idx);
 
-        for (int num : computerList[idx]){
-            if(!visited[num]){
-                counts[num]++;
-                DFS(num);
+        while (!queue.isEmpty()){
+            idx = queue.remove();
+
+            for (int num : computerList[idx]){
+                if(!visited[num]){
+                    visited[num] = true;
+                    counts[num]++;
+                    queue.add(num);
+                }
             }
         }
 
