@@ -44,8 +44,9 @@ public class boj_1743_음식물피하기 {
 
         for (int r = 1; r<=N;r++){
             for (int c = 1; c<=M;c++){
-                if(!visited[r][c] && map[r][c] =='#') continue;
-                BFS(new Point(r,c));
+                if(!visited[r][c] && map[r][c] =='#'){
+                    BFS(new Point(r,c));
+                }
             }
         }
 
@@ -55,13 +56,13 @@ public class boj_1743_음식물피하기 {
     public static void BFS(Point start){
         Queue<Point> queue = new LinkedList<>();
         queue.offer(start);
-        boolean[][] visited = new boolean[N+1][M+1];
+
         visited[start.r][start.c] = true;
 
         int size = 1;
 
 
-        System.out.println("출력");
+
         while(!queue.isEmpty()){
             Point current = queue.poll();
 
@@ -73,7 +74,7 @@ public class boj_1743_음식물피하기 {
                     size++;
                     queue.offer(new Point(nr,nc));
                     visited[nr][nc] = true;
-                    System.out.println(size);
+
                 }
             }
         }
