@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 public class boj_1937_욕심쟁이판다 {
     public static int N,ans;
     public static int[][] map;
+    public static int[][] dp;
     public static int[] dr = {0,0,1,-1};
     public static int[] dc = {1,-1,0,0};
     public static class Point{
@@ -23,7 +24,9 @@ public class boj_1937_욕심쟁이판다 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
         map = new int[N+1][N+1];
+        dp = new int[N+1][N+1];
         ans = 0;
+
         for (int r = 1;r<=N;r++){
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int c = 1; c<=N;c++){
@@ -33,42 +36,42 @@ public class boj_1937_욕심쟁이판다 {
 
         for (int r = 1;r<=N;r++){
             for (int c = 1; c<=N;c++){
-                BFS(new Point(r,c));
+                DFS(new Point(r,c),1);
             }
         }
+
+        for (int r = 1;r<=N;r++){
+            for (int c = 1; c<=N;c++){
+                if(ans < dp[r][c]){
+                    ans = dp[r][c];
+                }
+            }
+        }
+
 
         System.out.println(ans);
 
 
     }
 
-    public static void BFS(Point start){
-        Queue<Point> queue = new LinkedList<>();
-        queue.offer(start);
-        boolean[][] visited = new boolean[N+1][N+1];
 
-        visited[start.r][start.c] = true;
+    public static void DFS(Point current, int depth){
 
-        int depth = 0;
-        while(!queue.isEmpty()){
-            int size = queue.size();
+        if(dp[current.r][current.c] >= depth){
 
-            for (int s = 1; s<=size;s++){
-                Point current = queue.poll();
-
-                for (int d = 0; d<4;d++){
-                    int nr = current.r+dr[d];
-                    int nc = current.c+dc[d];
-                    if(nr>=1 && nr <=N && nc>= 1 && nc <= N && !visited[nr][nc] && map[current.r][current.c] < map[nr][nc]){
-                        queue.offer(new Point(nr,nc));
-                        visited[nr][nc] = true;
-                    }
-                }
-            }
-
-            depth++;
+            return;
         }
 
-        ans = Math.max(ans, depth);
+        dp[current.r][current.c] = depth;
+
+        for (int d = 0; d<4;d++){
+            int nr = current.r+dr[d];
+            int nc = current.c+dc[d];
+            if (nr >=1 && nr <= N && nc >= 1 && nc <= N && map[current.r][current.c] < map[nr][nc]){
+                DFS(new Point(nr,nc),depth+1);
+            }
+        }
     }
+
+
 }
