@@ -36,7 +36,7 @@ public class boj_1937_욕심쟁이판다 {
 
         for (int r = 1;r<=N;r++){
             for (int c = 1; c<=N;c++){
-                DFS(new Point(r,c),1);
+                DFS(new Point(r,c));
             }
         }
 
@@ -55,22 +55,26 @@ public class boj_1937_욕심쟁이판다 {
     }
 
 
-    public static void DFS(Point current, int depth){
+    public static int DFS(Point current){
 
-        if(dp[current.r][current.c] >= depth){
-
-            return;
+        if(dp[current.r][current.c] != 0){
+            return dp[current.r][current.c];
         }
 
-        dp[current.r][current.c] = depth;
+
+        dp[current.r][current.c] = 1;
 
         for (int d = 0; d<4;d++){
             int nr = current.r+dr[d];
             int nc = current.c+dc[d];
             if (nr >=1 && nr <= N && nc >= 1 && nc <= N && map[current.r][current.c] < map[nr][nc]){
-                DFS(new Point(nr,nc),depth+1);
+                dp[current.r][current.c] = Math.max(dp[current.r][current.c],DFS(new Point(nr,nc))+1);
             }
         }
+
+
+
+        return dp[current.r][current.c];
     }
 
 
