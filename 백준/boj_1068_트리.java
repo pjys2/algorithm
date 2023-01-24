@@ -29,28 +29,33 @@ public class boj_1068_트리 {
             nodeList[num].add(i);
         }
 
+//        for (int i = 0; i<N;i++){
+//            System.out.println(nodeList[i].toString());
+//        }
+
         int delNum = Integer.parseInt(br.readLine());
 
-        nodeList[delNum].clear();
+//        System.out.println("------------------");
+        DFS(delNum);
 
 
-        for (int i=0; i<N;i++){
-            int cnt = nodeList[i].size();
-            if(cnt >= 2) continue;
+//        for (int i = 0; i<N;i++){
+//            System.out.println(nodeList[i].toString());
+//        }
 
-
-            if (cnt == 0){
-                ans++;
-            }else{
-                int child = nodeList[i].get(0);
-
-                if (child == delNum) {
-                    ans++;
-                }
-            }
-        }
 
         System.out.println(ans);
+    }
+
+    public static void DFS(int delNum){
+
+        List<Integer> delList = nodeList[delNum];
+
+        for (int num : delList){
+            DFS(num);
+        }
+
+        nodeList[delNum].clear();
     }
 
 }
