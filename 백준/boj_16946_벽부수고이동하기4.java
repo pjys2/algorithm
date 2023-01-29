@@ -3,15 +3,25 @@ package 백준;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class boj_16946_벽부수고이동하기4 {
     public static int N, M, count;
     public static int[][] map;
-    public static boolean[][] visited;
     public static int[][] ans;
     public static int[] dr = {0,0,1,-1};
     public static int[] dc = {1,-1,0,0};
+    public static class Point{
+        int r, c;
+
+        public Point(int r, int c){
+            this.r = r;
+            this.c = c;
+        }
+
+    }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -30,35 +40,39 @@ public class boj_16946_벽부수고이동하기4 {
 
         for (int r = 0; r<N;r++){
             for (int c = 0; c<M;c++){
-                if(map[r][c] == 0){
-                    ans[r][c] = 0;
-                    continue;
-                }
+                if(map[r][c] == 0) continue;
 
-                count = 0;
-                visited = new boolean[N][M];
                 map[r][c] = 0;
-                DFS(r,c);
+                BFS(r,c);
                 map[r][c] = 1;
-                ans[r][c] = count%10;
             }
         }
 
         print();
 
     }
-
-    public static void DFS(int r, int c){
+    public static void BFS(int r, int c){
+        Queue<Point> queue = new LinkedList<>();
+        queue.add(new Point(r,c));
+        boolean[][] visited = new boolean[N][M];
         visited[r][c] = true;
-        count++;
-        for (int d = 0; d<4;d++){
-            int nr = r+dr[d];
-            int nc = c+dc[d];
-            if (nr >=0 && nr < N && nc >= 0 && nc <M && !visited[nr][nc] && map[nr][nc] == 0){
-                DFS(nr,nc);
+
+        while(!queue.isEmpty()){
+            Point current = queue.poll();
+            ans[r][c]++;
+            for (int d = 0; d<4;d++){
+                int nr = current.r+dr[d];
+                int nc = current.c+dc[d];
+                if (nr >= 0 && nr < N && nc >= 0 && nc < M && !visited[nr][nc] && map[nr][nc] == 0){
+                    visited[nr][nc] = true;
+                    queue.add(new Point(nr,nc));
+                }
             }
         }
+
+        ans[r][c] = ans[r][c]%10;
     }
+
 
     public static void print(){
         for (int r = 0; r<N;r++){
