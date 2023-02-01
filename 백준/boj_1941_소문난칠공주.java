@@ -40,6 +40,8 @@ public class boj_1941_소문난칠공주 {
         comb(0,0, new Point[7]);
 
 //        print();
+
+        System.out.println(ans);
     }
 
     public static void comb(int k, int idx, Point sel[]){
@@ -61,10 +63,30 @@ public class boj_1941_소문난칠공주 {
         visited[0] = true;
 
         while(queue.isEmpty()){
+            Point current = queue.poll();
 
+            for (int d = 0; d<4;d++){
+                int nr = current.r+dr[d];
+                int nc = current.c+dc[d];
+
+                if(nr >= 0 && nr <5 && nc >= 0 && nc <5){
+                    for (int i = 0; i<7;i++){
+                        if(visited[i]) continue;
+
+                        if (nr == sel[i].r && nc == sel[i].c){
+                            queue.add(new Point(nr,nc));
+                            visited[i] = true;
+                        }
+                    }
+                }
+            }
         }
 
+        for (int i = 0; i<7;i++){
+            if (!visited[i]) return;
+        }
 
+        ans++;
     }
 
     public static void print(){
