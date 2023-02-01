@@ -19,7 +19,19 @@ public class boj_1941_소문난칠공주 {
             }
         }
 
+
+        for (int r = 0; r<5;r++){
+            for (int c = 0; c<5;c++){
+                DFS(r, c);
+            }
+        }
+
         print();
+    }
+
+    public static void DFS(int r, int c){
+        
+
     }
 
     public static void print(){
