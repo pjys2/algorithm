@@ -21,6 +21,11 @@ public class boj_1941_소문난칠공주 {
             this.r = r;
             this.c = c;
         }
+
+        @Override
+        public String toString() {
+            return this.r+" "+this.c;
+        }
     }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -46,6 +51,7 @@ public class boj_1941_소문난칠공주 {
 
     public static void comb(int k, int idx, Point sel[]){
         if(k == 7){
+            //System.out.println(Arrays.toString(sel));
             BFS(sel);
             return;
         }
@@ -61,9 +67,13 @@ public class boj_1941_소문난칠공주 {
         Queue<Point> queue = new LinkedList<>();
         queue.add(sel[0]);
         visited[0] = true;
-
-        while(queue.isEmpty()){
+        int sCnt = 0;
+        while(!queue.isEmpty()){
             Point current = queue.poll();
+
+            if(table[current.r][current.c] == 'S'){
+                sCnt++;
+            }
 
             for (int d = 0; d<4;d++){
                 int nr = current.r+dr[d];
@@ -84,6 +94,7 @@ public class boj_1941_소문난칠공주 {
 
         for (int i = 0; i<7;i++){
             if (!visited[i]) return;
+            if (sCnt <4) return;
         }
 
         ans++;
