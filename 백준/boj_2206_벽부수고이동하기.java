@@ -42,6 +42,7 @@ public class boj_2206_벽부수고이동하기 {
         BFS(new Point(0,0,1,false));
 
 
+        print();
 
 
         if(ans == Integer.MAX_VALUE){
@@ -61,23 +62,35 @@ public class boj_2206_벽부수고이동하기 {
 
         while(!queue.isEmpty()){
 
-            int size = queue.size();
-
-            for (int i = 0; i < size; i++){
-                Point current = queue.poll();
+            Point current = queue.poll();
 
 
-
-
-
-
-                for (int d = 0; d<4;d++){
-                    int nr = current.r+dr[d];
-                    int nc = current.c+dc[d];
-
-                }
-
+            if(current.r == N && current.c == M){
+                System.out.println("출력");
+                ans = current.cnt;
             }
+
+            for (int d = 0; d<4;d++) {
+                int nr = current.r + dr[d];
+                int nc = current.c + dc[d];
+
+                if(nr < 1 || nr > N || nc < 1 || nc > M ) continue;
+
+                if(map[nr][nc] == 0){
+                    if(!current.destroyed && !visited[nr][nc][0]){
+                        queue.add(new Point(nr,nc,current.cnt+1, false));
+                    }else if(current.destroyed && !visited[nr][nc][1]){
+                        queue.add(new Point(nr,nc,current.cnt+1,true));
+                        visited[nr][nc][1] = true;
+                    }
+                }else if(map[nr][nc] == 1){
+                    if (!current.destroyed){
+                        queue.add(new Point(nr,nc, current.cnt+1, true));
+                        visited[nr][nc][1] = true;
+                    }
+                }
+            }
+
         }
     }
 
