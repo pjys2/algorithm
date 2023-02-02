@@ -11,14 +11,16 @@ public class boj_2206_벽부수고이동하기 {
     public static int[] dc = {1,-1,0,0};
     public static int[][] map;
     public static class Point{
-        int r, c;
+        int r, c, cnt;
+        boolean destroyed;
 
-        public Point(int r, int c){
+        public Point(int r, int c, int cnt, boolean destroyed){
             this.r = r;
             this.c = c;
+            this.cnt = cnt;
+            this.destroyed = destroyed;
         }
     }
-    public static boolean possible;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -37,7 +39,7 @@ public class boj_2206_벽부수고이동하기 {
             }
         }
 
-
+        BFS(new Point(0,0,1,false));
 
 
 
@@ -51,35 +53,28 @@ public class boj_2206_벽부수고이동하기 {
     }
 
 
-    public static void BFS(Point start, int count){
+    public static void BFS(Point start){
         Queue<Point> queue = new LinkedList<Point>();
-        boolean[][] visited = new boolean[N+1][M+1];
-        visited[start.r][start.c] = true;
+        boolean[][][] visited = new boolean[N+1][M+1][2];
+        visited[start.r][start.c][0] = true;
         queue.offer(start);
 
-        loop:while(!queue.isEmpty()){
+        while(!queue.isEmpty()){
 
             int size = queue.size();
-            count++;
+
             for (int i = 0; i < size; i++){
                 Point current = queue.poll();
 
 
-                if(count >= ans) return;
 
-                if(current.r == N && current.c == M && count < ans){
-                    ans = count;
-                    break loop;
-                }
+
+
 
                 for (int d = 0; d<4;d++){
                     int nr = current.r+dr[d];
                     int nc = current.c+dc[d];
 
-                    if(nr >= 1 && nr <=N && nc >= 1 && nc <=M && map[nr][nc] == 0 && !visited[nr][nc]){
-                        queue.offer(new Point(nr,nc));
-                        visited[nr][nc] = true;
-                    }
                 }
 
             }
