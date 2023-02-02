@@ -10,7 +10,6 @@ public class boj_2206_벽부수고이동하기 {
     public static int[] dr = {0,0,1,-1};
     public static int[] dc = {1,-1,0,0};
     public static int[][] map;
-    public static List<Point> wallList;
     public static class Point{
         int r, c;
 
@@ -29,7 +28,7 @@ public class boj_2206_벽부수고이동하기 {
 
         map = new int[N+1][M+1];
         ans = Integer.MAX_VALUE;
-        wallList = new ArrayList<>();
+
 
         for (int r = 1; r<=N;r++){
             String str = br.readLine();
@@ -39,19 +38,7 @@ public class boj_2206_벽부수고이동하기 {
         }
 
 
-        Check(new Point(1,1));
 
-
-        BFS(new Point(1,1),0);
-
-        for (int i = 0; i<wallList.size();i++){
-
-            int r = wallList.get(i).r;
-            int c = wallList.get(i).c;
-            map[r][c] = 0;
-            BFS(new Point(1,1),0);
-            map[r][c] = 1;
-        }
 
 
 
@@ -63,32 +50,6 @@ public class boj_2206_벽부수고이동하기 {
 
     }
 
-    public static void Check(Point start){
-        Queue<Point> queue = new LinkedList<Point>();
-        boolean[][] visited = new boolean[N+1][M+1];
-        visited[start.r][start.c] = true;
-        queue.offer(start);
-
-        while(!queue.isEmpty()){
-            Point current = queue.poll();
-
-
-            for (int d = 0; d<4;d++){
-                int nr = current.r+dr[d];
-                int nc = current.c+dc[d];
-
-                if(nr >= 1 && nr <=N && nc >= 1 && nc <=M && map[nr][nc] == 0 && !visited[nr][nc]){
-                    queue.offer(new Point(nr,nc));
-                    visited[nr][nc] = true;
-                }
-
-                if(nr >= 1 && nr <=N && nc >= 1 && nc <=M && map[nr][nc] == 1){
-                    wallList.add(new Point(nr,nc));
-                }
-            }
-
-        }
-    }
 
     public static void BFS(Point start, int count){
         Queue<Point> queue = new LinkedList<Point>();
