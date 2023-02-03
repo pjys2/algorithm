@@ -9,7 +9,7 @@ public class boj_2206_벽부수고이동하기 {
     public static int N, M, ans;
     public static int[] dr = {0,0,1,-1};
     public static int[] dc = {1,-1,0,0};
-    public static int[][] map;
+    public static char[][] map;
     public static class Point{
         int r, c, cnt;
         boolean destroyed;
@@ -28,14 +28,14 @@ public class boj_2206_벽부수고이동하기 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        map = new int[N+1][M+1];
+        map = new char[N+1][M+1];
         ans = Integer.MAX_VALUE;
 
 
         for (int r = 1; r<=N;r++){
             String str = br.readLine();
             for (int c = 1; c<=M;c++){
-                map[r][c] = str.charAt(c-1)-48;
+                map[r][c] = str.charAt(c-1);
             }
         }
 
@@ -73,14 +73,14 @@ public class boj_2206_벽부수고이동하기 {
 
                 if(nr < 1 || nr > N || nc < 1 || nc > M ) continue;
 
-                if(map[nr][nc] == 0){
+                if(map[nr][nc] == '0'){
                     if(!current.destroyed && !visited[nr][nc][0]){
                         queue.add(new Point(nr,nc,current.cnt+1, false));
                     }else if(current.destroyed && !visited[nr][nc][1]){
                         queue.add(new Point(nr,nc,current.cnt+1,true));
                         visited[nr][nc][1] = true;
                     }
-                }else if(map[nr][nc] == 1){
+                }else if(map[nr][nc] == '1'){
                     if (!current.destroyed){
                         queue.add(new Point(nr,nc, current.cnt+1, true));
                         visited[nr][nc][1] = true;
