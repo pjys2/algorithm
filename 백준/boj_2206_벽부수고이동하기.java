@@ -39,10 +39,8 @@ public class boj_2206_벽부수고이동하기 {
             }
         }
 
-        BFS(new Point(0,0,1,false));
+        BFS(new Point(1,1,1,false));
 
-
-        print();
 
 
         if(ans == Integer.MAX_VALUE){
@@ -66,7 +64,6 @@ public class boj_2206_벽부수고이동하기 {
 
 
             if(current.r == N && current.c == M){
-                System.out.println("출력");
                 ans = current.cnt;
             }
 
