@@ -29,7 +29,7 @@ public class boj_2206_벽부수고이동하기 {
         M = Integer.parseInt(st.nextToken());
 
         map = new char[N+1][M+1];
-        ans = Integer.MAX_VALUE;
+        ans = 0;
 
 
         for (int r = 1; r<=N;r++){
@@ -39,20 +39,15 @@ public class boj_2206_벽부수고이동하기 {
             }
         }
 
-        BFS(new Point(1,1,1,false));
+        ans = BFS(new Point(1,1,1,false));
 
 
-
-        if(ans == Integer.MAX_VALUE){
-            System.out.println(-1);
-        }else{
-            System.out.println(ans);
-        }
+        System.out.println(ans);
 
     }
 
 
-    public static void BFS(Point start){
+    public static int BFS(Point start){
         Queue<Point> queue = new LinkedList<Point>();
         boolean[][][] visited = new boolean[N+1][M+1][2];
         visited[start.r][start.c][0] = true;
@@ -64,7 +59,7 @@ public class boj_2206_벽부수고이동하기 {
 
 
             if(current.r == N && current.c == M){
-                ans = current.cnt;
+                return current.cnt;
             }
 
             for (int d = 0; d<4;d++) {
@@ -76,6 +71,7 @@ public class boj_2206_벽부수고이동하기 {
                 if(map[nr][nc] == '0'){
                     if(!current.destroyed && !visited[nr][nc][0]){
                         queue.add(new Point(nr,nc,current.cnt+1, false));
+                        visited[nr][nc][0] = true;
                     }else if(current.destroyed && !visited[nr][nc][1]){
                         queue.add(new Point(nr,nc,current.cnt+1,true));
                         visited[nr][nc][1] = true;
@@ -89,6 +85,8 @@ public class boj_2206_벽부수고이동하기 {
             }
 
         }
+
+        return -1;
     }
 
     public static void print(){
