@@ -38,15 +38,7 @@ public class boj_16946_벽부수고이동하기4 {
             }
         }
 
-        for (int r = 0; r<N;r++){
-            for (int c = 0; c<M;c++){
-                if(map[r][c] == 0) continue;
-
-                map[r][c] = 0;
-                BFS(r,c);
-                map[r][c] = 1;
-            }
-        }
+        BFS(0,0);
 
         print();
 
@@ -57,20 +49,7 @@ public class boj_16946_벽부수고이동하기4 {
         boolean[][] visited = new boolean[N][M];
         visited[r][c] = true;
 
-        while(!queue.isEmpty()){
-            Point current = queue.poll();
-            ans[r][c]++;
-            for (int d = 0; d<4;d++){
-                int nr = current.r+dr[d];
-                int nc = current.c+dc[d];
-                if (nr >= 0 && nr < N && nc >= 0 && nc < M && !visited[nr][nc] && map[nr][nc] == 0){
-                    visited[nr][nc] = true;
-                    queue.add(new Point(nr,nc));
-                }
-            }
-        }
 
-        ans[r][c] = ans[r][c]%10;
     }
 
 
