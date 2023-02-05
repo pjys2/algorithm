@@ -45,7 +45,7 @@ public class boj_16946_벽부수고이동하기4 {
         for (int r = 0; r<N;r++){
             for (int c = 0; c<M;c++){
 
-                if (visited[r][c]) continue;
+                if (visited[r][c])continue;
 
                 if(map[r][c] == 1){
                     map[r][c] = -1;
@@ -74,12 +74,19 @@ public class boj_16946_벽부수고이동하기4 {
 
                 sum+=1;
 
-                ans[r][c] = sum;
+                ans[r][c] = sum%10;
             }
         }
+        StringBuilder sb = new StringBuilder();
 
-        print();
+        for (int r = 0; r<N;r++){
+            for (int c = 0; c<M;c++){
+                sb.append(ans[r][c]);
+            }
+            sb.append("\n");
+        }
 
+        System.out.println(sb);
     }
 
     public static int BFS(int r, int c, int number){
