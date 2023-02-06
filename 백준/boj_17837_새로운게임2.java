@@ -86,24 +86,31 @@ public class boj_17837_새로운게임2 {
 
                     if(horseList[k].isBlue) continue;
 
-
+                    horseList[k].isBlue = true;
                     int dir = horseList[k].dir;
 
                     for(int num :state[cr][cc]){
                         if (num == k) flag = true;
                         if (!flag) continue;
-                        reverse(horseList[k],dir);
+                        reverse(horseList[num],dir);
                         moveList.add(num);
                     }
 
                     nr = horseList[k].r;
                     nc = horseList[k].c;
 
-                    if(nr == cr && nc == cc) continue;
+                    //위치를 변경한 값이 그대로면 continue
+//                    if(nr == cr && nc == cc) continue;
 
-
-                    state[cr][cc].removeAll(moveList);
-                    state[nr][nc].addAll(moveList);
+                    // 방향을 바꾸고 이동할 바닥이 흰색이면 그냥이동 빨간색이면 순서 바꿔서 이동
+                    if(board[nr][nc] == 0){
+                        state[cr][cc].removeAll(moveList);
+                        state[nr][nc].addAll(moveList);
+                    }else if(board[nr][nc] == 1){
+                        state[cr][cc].removeAll(moveList);
+                        Collections.reverse(moveList);
+                        state[nr][nc].addAll(moveList);
+                    }
 
                 }else if(board[nr][nc] == 0){
                     for(int num :state[cr][cc]){
@@ -132,7 +139,6 @@ public class boj_17837_새로운게임2 {
                     System.out.println(i);
                     return;
                 }
-
             }
         }
 
@@ -140,7 +146,7 @@ public class boj_17837_새로운게임2 {
 
     }
 
-    //흰색일때 다음칸 이동
+    //흰색 또는 빨간색일때 다음칸 이동
     public static void move(Horse horse, int nr, int nc){
         horse.r = nr;
         horse.c = nc;
@@ -148,7 +154,6 @@ public class boj_17837_새로운게임2 {
 
     //파란색일때 위치 바꾸기
     public static void reverse(Horse horse, int dir){
-        horse.isBlue = true;
 
         int nr = horse.r+dr[dir];
         int nc = horse.c+dc[dir];
@@ -159,6 +164,8 @@ public class boj_17837_새로운게임2 {
         horse.c = nc;
     }
 
+
+    //각 지점별 가장 아래에 있는 말 출력
     public static void print(){
         for (int r = 1; r<=N;r++){
             for (int c = 1; c<=N;c++){
