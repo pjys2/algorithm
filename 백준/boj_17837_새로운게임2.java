@@ -72,9 +72,6 @@ public class boj_17837_새로운게임2 {
 
                 if(nr < 1 || nr > N || nc < 1 || nc > N || board[nr][nc] == 2){
 
-                    if(horseList[k].isBlue) continue;
-
-
 
                     if(horseList[k].dir == 1){
                         horseList[k].dir = 2;
@@ -85,6 +82,9 @@ public class boj_17837_새로운게임2 {
                     }else if(horseList[k].dir == 4){
                         horseList[k].dir = 3;
                     }
+
+
+                    if(horseList[k].isBlue) continue;
 
 
                     int dir = horseList[k].dir;
@@ -132,6 +132,7 @@ public class boj_17837_새로운게임2 {
                     System.out.println(i);
                     return;
                 }
+
             }
         }
 
@@ -156,5 +157,19 @@ public class boj_17837_새로운게임2 {
 
         horse.r = nr;
         horse.c = nc;
+    }
+
+    public static void print(){
+        for (int r = 1; r<=N;r++){
+            for (int c = 1; c<=N;c++){
+                if(state[r][c].isEmpty()){
+                    System.out.print(0+" ");
+                    continue;
+                }
+
+                System.out.print(state[r][c].get(0)+" ");
+            }
+            System.out.println();
+        }
     }
 }
