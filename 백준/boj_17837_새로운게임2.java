@@ -73,6 +73,7 @@ public class boj_17837_새로운게임2 {
                 if(nr < 1 || nr > N || nc < 1 || nc > N || board[nr][nc] == 2){
 
 
+                    //방향 전환
                     if(horseList[k].dir == 1){
                         horseList[k].dir = 2;
                     }else if(horseList[k].dir == 2){
@@ -83,10 +84,10 @@ public class boj_17837_새로운게임2 {
                         horseList[k].dir = 3;
                     }
 
-
+                    //이미 파란색을 만난적이 있으면 continue
                     if(horseList[k].isBlue) continue;
 
-                    horseList[k].isBlue = true;
+//                    horseList[k].isBlue = true;
                     int dir = horseList[k].dir;
 
                     for(int num :state[cr][cc]){
@@ -100,7 +101,7 @@ public class boj_17837_새로운게임2 {
                     nc = horseList[k].c;
 
                     //위치를 변경한 값이 그대로면 continue
-//                    if(nr == cr && nc == cc) continue;
+                    if(nr == cr && nc == cc) continue;
 
                     // 방향을 바꾸고 이동할 바닥이 흰색이면 그냥이동 빨간색이면 순서 바꿔서 이동
                     if(board[nr][nc] == 0){
@@ -152,7 +153,7 @@ public class boj_17837_새로운게임2 {
         horse.c = nc;
     }
 
-    //파란색일때 위치 바꾸기
+    //파란색일때 위치 바꾸기 다음 위치가 파란색이면 제자리 유지 파란색이 아니면 이동
     public static void reverse(Horse horse, int dir){
 
         int nr = horse.r+dr[dir];
