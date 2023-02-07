@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class boj_1167_트리의지름 {
-    public static int N,A,ans;
-    public static List<Integer> bList;
+    public static int N,A,B,ans;
     public static Node[] nodeList;
     public static class Node{
         int num,v;
@@ -24,7 +23,6 @@ public class boj_1167_트리의지름 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
         nodeList = new Node[N+1];
-        bList = new ArrayList<>();
         ans = 0;
 
         for (int i = 1; i<=N;i++){
@@ -40,10 +38,11 @@ public class boj_1167_트리의지름 {
         }
 
         A = 1;
+        //임의의 끝점 B 찾기
         DFS(A,new boolean[N+1],0, true);
-        for (int B : bList){
-            DFS(B,new boolean[N+1],0,false);
-        }
+        //B를 넣고 가장 긴 거리에 있는 노드 찾기
+        DFS(B,new boolean[N+1],0,false);
+
 
 
         System.out.println(ans);
@@ -57,15 +56,10 @@ public class boj_1167_트리의지름 {
             if(visited[node.num]) continue;
 
             DFS(node.num,visited,sum+node.v,isA);
-            ans = Math.max(ans, sum+node.v);
 
-            if(ans <= sum+node.v ){
-                if(isA){
-                    ans = sum+node.v;
-                    bList.add(node.num);
-                }else if(!isA){
-                    ans = sum+node.v;
-                }
+            if(ans < sum+node.v ){
+                ans = sum+node.v;
+                B = node.num;
             }
         }
     }
