@@ -6,55 +6,84 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class boj_2251_물통 {
-    public static int[] size;
-    public static Set<Integer> ansSet;
+    public static int aSize,bSize,cSize;
+    public static List<Integer> ansList;
+    public static boolean[][][] visited;
+    public static class State{
+        int A, B, C;
+        public State(int A, int B, int C){
+            this.A = A;
+            this.B = B;
+            this.C = C;
+        }
+    }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        size = new int[3];
-        size[0] = Integer.parseInt(st.nextToken());
-        size[1] = Integer.parseInt(st.nextToken());
-        size[2] = Integer.parseInt(st.nextToken());
+        aSize = Integer.parseInt(st.nextToken());
+        bSize = Integer.parseInt(st.nextToken());
+        cSize = Integer.parseInt(st.nextToken());
 
-        int[] water = new int[3];
-        water[2] = size[2];
+        ansList = new ArrayList<>();
+        visited = new boolean[aSize+1][bSize+1][cSize+1];
 
-        ansSet = new HashSet<>();
 
-        DFS(2,water,true);
-
-        for (int num : ansSet){
+        DFS(new State(0,0,cSize));
+        Collections.sort(ansList);
+        for (int num : ansList){
             System.out.print(num+" ");
         }
 
     }
 
-    public static void DFS(int current,int[] water,boolean isStart){
-        System.out.println(Arrays.toString(water));
+    public static void DFS(State current){
+        if(visited[current.A][current.B][current.C]) return;
+        visited[current.A][current.B][current.C] = true;
 
-        if(!isStart && water[0] == 0){
-            ansSet.add(water[2]);
-            return;
+        if(current.A == 0){
+            ansList.add(current.C);
         }
 
 
-        for (int next = 0; next<3;next++){
-            if(next == current) continue;
-            int[] nextWater = new int[3];
-            for (int i = 0; i<3;i++){
-                nextWater[i] = water[i];
-            }
-            int possible = size[next]-nextWater[next];
 
-            if(possible > nextWater[current]){
-                nextWater[next] += nextWater[current];
-                nextWater[current] = 0;
-            }else{
-                nextWater[current] -= possible;
-                nextWater[next] += possible;
-            }
+        //물 이동
 
-            DFS(next,nextWater,false);
+        //A -> B
+        if(current.A+current.B > bSize){
+            DFS(new State(current.A+current.B-bSize,bSize, current.C));
+        }else{
+            DFS(new State(0,current.A+current.B,current.C));
         }
+        //A -> C
+        if(current.A+current.C > cSize){
+            DFS(new State(current.A+current.C-cSize, current.B, cSize));
+        }else{
+            DFS(new State(0,current.B,current.A+current.C));
+        }
+        //B -> C
+        if(current.B+current.C > cSize){
+            DFS(new State(current.A,current.B+current.C-cSize,cSize));
+        }else{
+            DFS(new State(current.A,0,current.B+current.C));
+        }
+        //B -> A
+        if(current.B+current.A > aSize){
+            DFS(new State(aSize,current.B+current.A-aSize, current.C));
+        }else{
+            DFS(new State(current.A+current.B,0,current.C));
+        }
+        //C -> A
+        if(current.C+current.A > aSize){
+            DFS(new State(aSize, current.B,current.C+current.A-aSize));
+        }else{
+            DFS(new State(current.A+current.C, current.B, 0));
+        }
+        //C -> B
+        if(current.C+current.B > bSize){
+            DFS(new State(current.A,bSize, current.C+current.B-bSize));
+        }else{
+            DFS(new State(current.A, current.B+ current.C, 0));
+        }
+
     }
 }
