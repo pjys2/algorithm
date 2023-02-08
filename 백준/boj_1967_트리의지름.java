@@ -9,7 +9,7 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class boj_1967_트리의지름 {
-    public static int N;
+    public static int N,A,B;
     public static Node[] nodeList;
     public static int ans;
     public static class Node{
@@ -44,9 +44,12 @@ public class boj_1967_트리의지름 {
 
         ans = 0;
 
-        for (int i = 1; i<=N;i++){
-            DFS(i, new boolean[N+1],0);
-        }
+
+        A = 1;
+        DFS(A, new boolean[N+1],0);
+        DFS(B, new boolean[N+1],0);
+
+
 
         System.out.println(ans);
     }
@@ -57,7 +60,12 @@ public class boj_1967_트리의지름 {
         for (Node node = nodeList[current]; node != null; node = node.node) {
             if (!visited[node.num]) {
                 DFS(node.num,visited,sum+node.len);
-                ans = Math.max(ans, sum+node.len);
+
+                if(ans < sum+node.len){
+                    ans = sum+node.len;
+                    B = node.num;
+                }
+
             }
         }
     }
