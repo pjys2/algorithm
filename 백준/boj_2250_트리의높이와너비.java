@@ -12,12 +12,12 @@ public class boj_2250_트리의높이와너비 {
     public static int[][] node;
     public static int[] min;
     public static int[] max;
-    public static boolean[] check;
+    public static int[] check;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         N = Integer.parseInt(br.readLine());
-        check = new boolean[N+1];
+        check = new int[N+1];
         nodeNum = new int[N+1];
         node = new int[N+1][2];
         max = new int[10000];
@@ -34,13 +34,19 @@ public class boj_2250_트리의높이와너비 {
             //0 왼쪽, 1 오른쪽
             node[num][0] = Integer.parseInt(st.nextToken());
             node[num][1] = Integer.parseInt(st.nextToken());
-            check[node[num][0]] = true;
-            check[node[num][1]] = true;
+
+            if(node[num][0] != -1){
+                check[node[num][0]] = num;
+            }
+
+            if(node[num][1] != -1){
+                check[node[num][1]] = num;
+            }
         }
 
         for (int i = 1; i<=N;i++){
-            if(check[i]) continue;
-            start = i;
+            if(check[i] != 0) continue;
+            start = nodeNum[i];
         }
 
         DFS(start, 1);
