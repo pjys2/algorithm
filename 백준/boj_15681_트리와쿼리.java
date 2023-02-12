@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -37,10 +38,13 @@ public class boj_15681_트리와쿼리 {
 
         DFS(R);
 
-        for (int q = 1;q<=Q;q++){
-            System.out.println(ans[q]);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1;i<=Q;i++){
+            int q = Integer.parseInt(br.readLine());
+            sb.append(ans[q]+"\n");
         }
 
+        System.out.println(sb);
     }
 
 
@@ -48,15 +52,17 @@ public class boj_15681_트리와쿼리 {
         visited[current] = true;
 
         if(nodeList[current] == null){
+            System.out.println("출력");
             return  1;
         }
 
         for (int next : nodeList[current]){
             if(visited[next]) continue;
+
             ans[current] += DFS(next);
         }
 
-
+        ans[current]++;
         return ans[current];
     }
 }
