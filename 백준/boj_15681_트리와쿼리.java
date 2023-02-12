@@ -3,10 +3,15 @@ package 백준;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class boj_15681_트리와쿼리 {
     public static int N,R,Q;
+    public static int[] ans;
+    public static boolean[] visited;
+    public static List<Integer>[] nodeList;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -14,13 +19,44 @@ public class boj_15681_트리와쿼리 {
         R = Integer.parseInt(st.nextToken());
         Q = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i<Q;i++){
+        ans = new int[N+1];
+        visited = new boolean[N+1];
+        nodeList = new ArrayList[N+1];
+        for (int i = 1; i<=N;i++){
+            nodeList[i] = new ArrayList<>();
+        }
+
+        for (int i = 1; i<N;i++){
             st = new StringTokenizer(br.readLine());
             int u = Integer.parseInt(st.nextToken());
             int v = Integer.parseInt(st.nextToken());
 
-            
+            nodeList[u].add(v);
+            nodeList[v].add(u);
         }
 
+        DFS(R);
+
+        for (int q = 1;q<=Q;q++){
+            System.out.println(ans[q]);
+        }
+
+    }
+
+
+    public static int DFS(int current){
+        visited[current] = true;
+
+        if(nodeList[current] == null){
+            return  1;
+        }
+
+        for (int next : nodeList[current]){
+            if(visited[next]) continue;
+            ans[current] += DFS(next);
+        }
+
+
+        return ans[current];
     }
 }
