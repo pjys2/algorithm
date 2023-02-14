@@ -7,18 +7,13 @@ import java.util.*;
 
 public class boj_13549_숨바꼭질3 {
     public static int N, K;
+    public static boolean[][] visited;
 
-    public static class Info implements Comparable<Info>{
+    public static class Info{
         int pos, time;
-
-        public Info(int pos, int time){
+        public Info(int pos, int time,boolean jump){
             this.pos = pos;
             this.time = time;
-        }
-
-        @Override
-        public int compareTo(Info o) {
-            return this.time-o.time;
         }
     }
     public static void main(String[] args) throws IOException {
@@ -27,15 +22,14 @@ public class boj_13549_숨바꼭질3 {
 
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
-
-        BFS(new Info(N,0));
+        visited= new boolean[100001][2];
+        BFS(new Info(N,0,false));
     }
 
     public static void BFS(Info start){
-        PriorityQueue<Info> queue = new PriorityQueue<>();
+        Queue<Info> queue = new LinkedList<>();
         queue.add(start);
-        Set<Integer> visitSet = new HashSet<>();
-        visitSet.add(start.pos);
+        visited[start.pos][0] = true;
         while(!queue.isEmpty()){
             Info current = queue.poll();
 
@@ -45,24 +39,22 @@ public class boj_13549_숨바꼭질3 {
             }
 
             int next = current.pos*2;
-            if(next > 0 && !visitSet.contains(next)){
-                queue.add(new Info(next,current.time));
-                visitSet.add(next);
+            if(next >= 0 && next <= 100000 && !visited[next][1]){
+                queue.add(new Info(next,current.time,true));
+                visited[next][1] = true;
             }
 
             next = current.pos+1;
-            if(next > 0 && !visitSet.contains(next)){
-                queue.add(new Info(next,current.time+1));
-                visitSet.add(next);
+            if(next >= 0 && next <= 100000 && !visited[next][0]){
+                queue.add(new Info(next,current.time+1,false));
+                visited[next][0] = true;
             }
 
             next = current.pos-1;
-            if(next > 0 && !visitSet.contains(next)){
-                queue.add(new Info(next,current.time+1));
-                visitSet.add(next);
+            if(next >= 0 && next <= 100000 && !visited[next][0]){
+                queue.add(new Info(next,current.time+1,false));
+                visited[next][0] = true;
             }
-
-
         }
     }
 }
