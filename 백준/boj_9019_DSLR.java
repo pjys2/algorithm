@@ -29,6 +29,8 @@ public class boj_9019_DSLR {
             B = Integer.parseInt(st.nextToken());
             visited = new boolean[10000];
 
+            BFS();
+
 
         }
     }
@@ -41,9 +43,10 @@ public class boj_9019_DSLR {
         while(!queue.isEmpty()){
             State current = queue.poll();
 
+
             if(current.num == B){
                 System.out.println(current.str);
-                System.out.println("출력");
+
                 break;
             }
 
@@ -51,30 +54,35 @@ public class boj_9019_DSLR {
             int next = (current.num * 2) %10000;
             if(!visited[next]){
                 queue.add(new State(next,current.str+"D"));
+                visited[next] = true;
             }
             next = (current.num == 0) ? 9999 : current.num-1;
             if(!visited[next]){
                 queue.add(new State(next,current.str+"S"));
+                visited[next] = true;
             }
             int num = current.num;
-            int d1 = current.num/1000;
+            int d1 = num/1000;
             num = num%1000;
-            int d2 = current.num/100;
+            int d2 = num/100;
             num = num%100;
-            int d3 = current.num/10;
+            int d3 = num/10;
             num = num%10;
             int d4 = num;
+
 
             next = (d2 * 1000) + (d3 *100)+(d4*10)+d1;
 
             if(!visited[next]){
                 queue.add(new State(next,current.str+"L"));
+                visited[next] = true;
             }
 
             next = (d4 * 1000) + (d1 *100)+(d2*10)+d3;
 
             if(!visited[next]){
                 queue.add(new State(next,current.str+"R"));
+                visited[next] = true;
             }
         }
     }
