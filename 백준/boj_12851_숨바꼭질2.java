@@ -3,9 +3,7 @@ package 백준;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class boj_12851_숨바꼭질2 {
     public static int N, K;
@@ -35,6 +33,7 @@ public class boj_12851_숨바꼭질2 {
         boolean isEnd = false;
         while(!queue.isEmpty()){
             int size = queue.size();
+            Set<Integer> visitSet = new HashSet<>();
             for (int s = 0; s<size;s++){
                 int current = queue.poll();
 
@@ -47,7 +46,7 @@ public class boj_12851_숨바꼭질2 {
                 }
                 if(next >=0 && next <= 100000 && !visited[next]){
                     queue.add(next);
-                    visited[next] = true;
+                    visitSet.add(next);
                 }
 
                 next = current-1;
@@ -57,7 +56,7 @@ public class boj_12851_숨바꼭질2 {
                 }
                 if(next >=0 && next <= 100000 && !visited[next]){
                     queue.add(next);
-                    visited[next] = true;
+                    visitSet.add(next);
                 }
 
                 next = current*2;
@@ -67,8 +66,12 @@ public class boj_12851_숨바꼭질2 {
                 }
                 if(next >=0 && next <= 100000 && !visited[next]){
                     queue.add(next);
-                    visited[next] = true;
+                    visitSet.add(next);
                 }
+            }
+
+            for (int n : visitSet){
+                visited[n] = true;
             }
 
 
