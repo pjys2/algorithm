@@ -33,6 +33,8 @@ public class boj_11559_puyopuyo {
         }
 
         int ans = 0;
+
+        clear();
         while(findPuyo()){
             for (Point puyo : puyoList){
                 map[puyo.r][puyo.c] = '.';
@@ -53,17 +55,18 @@ public class boj_11559_puyopuyo {
     public static void clear(){
 
         for (int i = 0 ; i < 6; i++){
-            for (int j = 11; j>1;j--){
-                if (map[j][i] != '.') continue;
-
-                for (int k = j-1;k>=0;k--){
-                    if(map[k][i] != '.'){
-                        map[j][i] = map[k][i];
-                        map[k][i] = '.';
-
-                        break;
-                    }
+            List<Character> charList = new ArrayList<>();
+            for (int j = 11; j>=0;j--){
+                if (map[j][i] != '.'){
+                    charList.add(map[j][i]);
+                    map[j][i] = '.';
                 }
+            }
+
+            int idx = 11;
+            for (char c : charList){
+                map[idx][i] = c;
+                idx--;
             }
         }
     }
@@ -80,7 +83,6 @@ public class boj_11559_puyopuyo {
                 fuyoCheck(new Point(r,c));
             }
         }
-
 
 
         if(!puyoList.isEmpty()){
