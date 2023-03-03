@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class boj_1939_중량제한 {
-    public static int N, M;
+    public static int N, M,ans;
     public static List<Node>[] nodeList;
     public static boolean[] visited;
     public static class Node{
@@ -25,6 +25,11 @@ public class boj_1939_중량제한 {
         M = Integer.parseInt(st.nextToken());
 
         nodeList = new ArrayList[N+1];
+
+        int min = 1000000000;
+        int max = 0;
+
+
         for (int i = 1; i<=N;i++){
             nodeList[i] = new ArrayList<>();
         }
@@ -36,43 +41,52 @@ public class boj_1939_중량제한 {
             int w = Integer.parseInt(st.nextToken());
             nodeList[A].add(new Node(B,w));
             nodeList[B].add(new Node(A,w));
+            min = Math.min(min,w);
+            max = Math.max(max,w);
         }
 
         st = new StringTokenizer(br.readLine());
         int start = Integer.parseInt(st.nextToken());
         int end = Integer.parseInt(st.nextToken());
-        visited = new boolean[N+1];
-        BFS(start,end);
+
+
+
+        while(min <= max){
+            int mid = (min+max)/2;
+            if(BFS(start,end,mid)){
+                min = mid+1;
+            }else{
+                max = mid-1;
+            }
+        }
+        System.out.println(min);
 
     }
 
-    public static void BFS(int start, int end){
+    public static boolean BFS(int start, int end, int limit){
         Queue<Node> queue = new LinkedList<>();
-        queue.add(new Node(start, 1000000000));
-        visited[start] = true;
+        queue.add(new Node(start, 0));
+        visited = new boolean[N+1];
 
-        List<Integer> weightList = new ArrayList<>();
         while(!queue.isEmpty()){
-            Node current = queue.poll();
+            int size = queue.size();
 
-            if(current.num == end){
-                weightList.add(current.weight);
-            }
+            for (int s = 0; s<size;s++){
+                Node current = queue.poll();
 
-            for (Node next : nodeList[current.num]){
-                if(!visited[next.num]){
-                   int weight = Math.min(next.weight,current.weight);
-                   queue.add(new Node(next.num,weight));
-                   visited[next.num] = true;
+                if(current.num == end){
+                    return true;
+                }
+
+                for (Node next : nodeList[current.num]){
+                    if(!visited[next.num] && next.weight > limit){
+                        queue.add(next);
+                        visited[next.num] = true;
+                    }
                 }
             }
         }
 
-        int ans = 0;
-        for (int weight : weightList){
-            ans = Math.max(ans, weight);
-        }
-
-        System.out.println(ans);
+        return false;
     }
 }
