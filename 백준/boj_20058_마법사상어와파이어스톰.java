@@ -77,7 +77,7 @@ public class boj_20058_마법사상어와파이어스톰 {
 
 
         }
-        
+
 
         int iceNum = 0;
         for (int r = 0; r<mapSize;r++){
