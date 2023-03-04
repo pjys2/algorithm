@@ -48,7 +48,9 @@ public class boj_20058_마법사상어와파이어스톰 {
                 divide(i);
             }
 
+
             //얼음 녹음
+            List<Point> iceList = new ArrayList<>();
             for (int r = 0; r<mapSize;r++){
                 for (int c = 0; c<mapSize;c++){
                     if(map[r][c] == 0) continue;
@@ -63,11 +65,19 @@ public class boj_20058_마법사상어와파이어스톰 {
                     }
 
                     if(cnt < 3){
-                        map[r][c]--;
+                        iceList.add(new Point(r,c));
                     }
                 }
             }
+
+            for (Point ice : iceList){
+                map[ice.r][ice.c]--;
+            }
+
+
+
         }
+        
 
         int iceNum = 0;
         for (int r = 0; r<mapSize;r++){
@@ -78,21 +88,17 @@ public class boj_20058_마법사상어와파이어스톰 {
 
         System.out.println(iceNum);
 
-
+        ans = 0;
         visited = new boolean[mapSize][mapSize];
         for (int r = 0; r<mapSize;r++){
             for (int c = 0; c<mapSize;c++){
-                if(visited[r][c]) continue;
+                if(visited[r][c] || map[r][c] == 0) continue;
 
                 BFS(new Point(r,c));
             }
         }
 
         System.out.println(ans);
-
-
-        System.out.println("-------------");
-        print();
     }
 
     public static void BFS(Point start){
@@ -100,10 +106,11 @@ public class boj_20058_마법사상어와파이어스톰 {
         queue.add(start);
         visited[start.r][start.c] = true;
 
+
         int iceCnt = 0;
         while(!queue.isEmpty()){
             Point current = queue.poll();
-            iceCnt += map[current.r][current.c];
+            iceCnt++;
 
             for (int d = 0; d<4;d++){
                 int nr = current.r+dr[d];
@@ -119,22 +126,37 @@ public class boj_20058_마법사상어와파이어스톰 {
             ans = iceCnt;
         }
 
+
     }
 
 
     public static void divide(int i){
         int range = (int) Math.pow(2,L[i]);
 
-        int num = (int) Math.pow(4, L[i]-1);
+
         for (int r = 0; r<mapSize;r=r+range){
            for (int c = 0;c<mapSize;c=c+range){
+                //이부분 고쳐야됨
+               int[][] copyMap = new int[range][range];
 
-               for (int k = 0; k<num;k++){
-                    int temp = map[r][c];
-                    map[r][c] = map[r+L[i]][c];
-                    map[r+L[i]][c] = map[r+L[i]][c+L[i]];
-                    map[r+L[i]][c+L[i]] = map[r][c+L[i]];
-                    map[r][c+L[i]] = temp;
+
+               int nr = 0;
+               int nc = 0;
+               for (int cc = c; cc<c+range;cc++){
+                   for(int cr = r+range-1;cr >= r;cr--){
+                           copyMap[nr][nc] = map[cr][cc];
+                           nc++;
+                           if(nc == range){
+                               nc = 0;
+                               nr++;
+                           }
+                   }
+               }
+
+               for(int cr = 0;cr <range;cr++){
+                   for (int cc = 0; cc<range;cc++){
+                       map[r+cr][c+cc] = copyMap[cr][cc];
+                   }
                }
            }
         }
