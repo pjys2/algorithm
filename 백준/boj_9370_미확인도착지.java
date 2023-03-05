@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class boj_9370_미확인도착지 {
-    public static int n, m, t, s,g,h,min;
+    public static int n, m, t, s,g,h;
     public static List<Node>[] nodeList;
     public static List<Integer> ansList;
     public static class Node{
@@ -27,7 +27,6 @@ public class boj_9370_미확인도착지 {
             m = Integer.parseInt(st.nextToken());
             t = Integer.parseInt(st.nextToken());
 
-            min = Integer.MAX_VALUE;
             nodeList = new List[n+1];
             ansList = new ArrayList<>();
             for (int i = 1; i<=n;i++){
@@ -49,29 +48,40 @@ public class boj_9370_미확인도착지 {
                 nodeList[b].add(new Node(a,c));
             }
 
+
+            int sTog = dijkstra(s,g);
+            int sToh = dijkstra(s,h);
+            int gToh = dijkstra(g,h);
             for (int i =0; i<t;i++){
                 int x = Integer.parseInt(br.readLine());
 
-                dijkstra(s,x);
+                int sTox = dijkstra(s,x);
+                int gTox = dijkstra(g,x);
+                int hTox = dijkstra(h,x);
+                if(sTox >= sTog+gToh+hTox){
+                    ansList.add(x);
+                }else if(sTox >= sToh+gToh+gTox){
+                    ansList.add(x);
+                }
             }
 
             Collections.sort(ansList);
             for (int ans : ansList){
                 System.out.print(ans+" ");
             }
-            System.out.println();
 
+            System.out.println();
         }
     }
 
-    public static void dijkstra(int start, int end){
+    public static int dijkstra(int start, int end){
         int[] distance = new int[n+1];
         boolean[] visited = new boolean[n+1];
-        int[] parrents = new int[n+1];
-        boolean check = false;
+//        int[] parents = new int[n+1];
+//        boolean check = false;
 
 
-        Arrays.fill(distance, Integer.MAX_VALUE);
+        Arrays.fill(distance, 3000000);
         distance[start] = 0;
 
         for (int i = 1; i<=n;i++){
@@ -80,6 +90,11 @@ public class boj_9370_미확인도착지 {
 
             for (int j = 1; j<=n;j++){
                 if(!visited[j] && min > distance[j]){
+                    min = distance[j];
+                    current = j;
+                }
+
+                if(!visited[j] && (j == g || j == h) && min >= distance[j]){
                     min = distance[j];
                     current = j;
                 }
@@ -92,16 +107,17 @@ public class boj_9370_미확인도착지 {
             for (Node node:nodeList[current]){
                 if(!visited[node.num] && distance[node.num] > node.len + distance[current]){
                     distance[node.num] = node.len+distance[current];
-                    parrents[node.num] = current;
+//                    parents[node.num] = current;
                 }
             }
         }
 
-        check = isPossible(end,parrents,false,false);
-
-        if (check){
-            ansList.add(end);
-        }
+//        check = isPossible(end,parents,false,false);
+//
+//        if (check){
+//            ansList.add(end);
+//        }
+        return distance[end];
 
     }
 
