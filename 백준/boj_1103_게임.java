@@ -8,9 +8,9 @@ import java.util.StringTokenizer;
 public class boj_1103_게임 {
     public static int N, M, ans;
     public static char[][] board;
+    public static int[][] dp;
     public static boolean isLoop;
     public static boolean[][] visited;
-    public static boolean[][][][] loopCheck;
     public static int[] dr = {-1,1,0,0};
     public static int[] dc = {0,0,-1,1};
     public static class Point{
@@ -28,10 +28,10 @@ public class boj_1103_게임 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         ans = 0;
-        isLoop = false;
-        loopCheck = new boolean[N][M][N][M];
+        dp = new int[N][M];
         board = new char[N][M];
         visited = new boolean[N][M];
+        isLoop = false;
 
         for (int r = 0; r<N;r++){
             String str = br.readLine();
@@ -41,35 +41,48 @@ public class boj_1103_게임 {
         }
 
         DFS(new Point(0,0),1);
-        System.out.println(ans);
+
+        if(isLoop){
+            System.out.println(-1);
+        }else{
+            System.out.println(ans);
+        }
+
+
     }
 
 
     public static void DFS(Point current, int cnt){
-        if (isLoop){
-            ans = -1;
-            return;
-        }else if(ans < cnt){
-            ans = cnt;
-        }
+
+        if(isLoop) return;
+
+        if(cnt > ans) ans = cnt;
+
+
+        dp[current.r][current.c] = cnt;
 
         int num = board[current.r][current.c]-'0';
+
         for (int d = 0; d<4;d++){
             int nr = current.r+(dr[d]*num);
             int nc = current.c+(dc[d]*num);
 
+            if(nr < 0 || nr >= N || nc < 0 || nc >= M || board[nr][nc] == 'H') continue;
 
-            if(nr >= 0 && nr < N && nc >= 0 && nc < M && loopCheck[current.r][current.c][nr][nc]){
+
+            if(visited[nr][nc]){
                 isLoop = true;
-                ans = -1;
                 return;
             }
 
-            if(nr >= 0 && nr < N && nc >= 0 && nc < M && board[nr][nc] != 'H' && !visited[nr][nc]){
-                DFS(new Point(nr,nc),cnt+1);
-                visited[nr][nc] = true;
-                loopCheck[current.r][current.c][nr][nc] = true;
-            }
+            if(dp[nr][nc] > cnt) continue;
+
+
+           if(!visited[nr][nc]){
+               visited[nr][nc] = true;
+               DFS(new Point(nr,nc), cnt+1);
+               visited[nr][nc] = false;
+           }
         }
     }
 }
