@@ -63,7 +63,7 @@ public class boj_2234_성곽 {
 
                     if(roomNum[r][c] == roomNum[nr][nc]) continue;
 
-                    int temp = roomNum[r][c] + roomNum[nr][nc];
+                    int temp = ansMap.get(roomNum[r][c]) + ansMap.get(roomNum[nr][nc]);
                     ans = Math.max(ans,temp);
 
                 }
@@ -71,6 +71,7 @@ public class boj_2234_성곽 {
         }
 
         System.out.println(ans);
+
 
     }
 
@@ -89,7 +90,7 @@ public class boj_2234_성곽 {
                 int nc = current.c+dc[d];
                 if(nr < 1 || nr > M || nc <1 || nc > N || visited[nr][nc]) continue;
 
-                if((wall[nr][nc] & bit[d]) == 1) continue;
+                if((wall[current.r][current.c] & bit[d]) == bit[d]) continue;
 
                 queue.add(new Point(nr,nc));
                 visited[nr][nc] = true;
@@ -103,7 +104,7 @@ public class boj_2234_성곽 {
     public static void print(){
         for (int r = 1;r<=M;r++){
             for (int c = 1; c<=N;c++){
-                System.out.print(wall[r][c]+" ");
+                System.out.print(roomNum[r][c]+" ");
             }
             System.out.println();
         }
