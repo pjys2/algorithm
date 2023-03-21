@@ -3,6 +3,7 @@ package 백준;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,7 +59,7 @@ public class boj_1238_파티 {
 
         int ans = 0;
         for (int i = 1; i<=N;i++){
-            System.out.println(i +" : "+(goDist[i]+comeDist[i]));
+
             ans = Math.max(ans,goDist[i]+comeDist[i]);
         }
 
@@ -95,39 +96,41 @@ public class boj_1238_파티 {
         boolean[] visited = new boolean[N+1];
         Node[] parrents = new Node[N+1];
 
-        dis[start] = 0;
-
         Arrays.fill(dis,1000000);
+
+        dis[start] = 0;
 
         //최단 경로 찾기
         for (int i = 1; i<=N;i++){
             int current = 0;
             int minDis = 1000000;
             for (int j = 1; j<=N;j++){
-                if (!visited[j] && minDis > comeDist[j]){
+                if (!visited[j] && minDis > dis[j]){
                     current = j;
-                    minDis = comeDist[j];
+                    minDis = dis[j];
                 }
             }
 
             visited[current] = true;
             if (current == end){
-                return;
+                comeDist[start] = dis[end];
+                break;
             }
 
+
             for (Node node : nodeList[current]){
-                if(comeDist[node.num] > node.T + comeDist[current]){
-                    comeDist[node.num] = node.T + comeDist[current];
+                if(dis[node.num] > node.T + dis[current]){
+                    dis[node.num] = node.T + dis[current];
                     parrents[node.num] = new Node(current,node.T);
                 }
             }
         }
-        //부모를 찾아가면서 시간 기록
-        int time = 0;
-        for (int i = end; i != start; i = parrents[i].num){
-            time = parrents[i].T;
-            comeDist[parrents[i].num] = time;
-        }
+
+//        int time = 0;
+//        for (int i = end; i != start; i = parrents[i].num){
+//            time = parrents[i].T;
+//            comeDist[parrents[i].num] = time;
+//        }
 
     }
 }
