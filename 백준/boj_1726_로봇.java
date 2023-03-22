@@ -75,7 +75,9 @@ public class boj_1726_로봇 {
                 for (int k = 1; k<=3;k++){
                     int nr = current.r+(dr[current.dir]*k);
                     int nc = current.c+(dc[current.dir]*k);
-                    if(nr < 1 || nr > M || nc < 1 || nc > N || visited[nr][nc][current.dir] || map[nr][nc] == 1) break;
+                    if(nr < 1 || nr > M || nc < 1 || nc > N || map[nr][nc] == 1) break;
+
+                    if(visited[nr][nc][current.dir]) continue;
 
                     queue.add(new Robot(nr,nc,current.dir,current.cnt+1));
                     visited[nr][nc][current.dir] = true;
