@@ -8,6 +8,7 @@ import java.util.*;
 public class boj_5551_쇼핑몰 {
     public static int N, M, K;
     public static List<Node>[] nodeList;
+    public static List<NodeData> dataList;
     public static Set<Integer> shopCity;
     public static int[] minDis;
     public static class Node implements Comparable<Node>{
@@ -24,9 +25,18 @@ public class boj_5551_쇼핑몰 {
         }
     }
 
+    public static class NodeData{
+        int a, b, len;
+
+        public NodeData(int a, int b, int len){
+            this.a = a;
+            this.b = b;
+            this.len = len;
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken());
@@ -34,8 +44,11 @@ public class boj_5551_쇼핑몰 {
         K = Integer.parseInt(st.nextToken());
         minDis = new int[N+1];
         nodeList = new List[N+1];
+        dataList = new ArrayList<>();
         shopCity = new HashSet<>();
-        Arrays.fill(minDis,300000000);
+
+
+        Arrays.fill(minDis, 300000000);
         for (int i = 1; i<=N;i++){
             nodeList[i] = new ArrayList<>();
         }
@@ -48,52 +61,44 @@ public class boj_5551_쇼핑몰 {
 
             nodeList[a].add(new Node(b,l));
             nodeList[b].add(new Node(a,l));
+
+            dataList.add(new NodeData(a,b,l));
         }
 
         for (int i = 0; i<K;i++){
             int num = Integer.parseInt(br.readLine());
-            minDis[num] = 0;
             shopCity.add(num);
-        }
-
-        for (int i = 1; i<=N;i++){
-            dijkstra(i);
+            dijkstra(num);
         }
 
         double ans = 0;
-        for (int i = 1; i<=N;i++){
-            if (nodeList[i].isEmpty()) continue;
-            for (Node node : nodeList[i]){
-                ans = Math.max(ans, ((double)(minDis[node.num] + minDis[i] + node.len)/2));
-            }
-        }
 
+        for (NodeData nodeData : dataList){
+            ans = Math.max(ans, (minDis[nodeData.a] + minDis[nodeData.b] + nodeData.len+1)/2);
+        }
 
         System.out.println(Math.round(ans));
     }
 
-    public static void dijkstra(int start){
-        int[] distance = new int[N+1];
-        boolean[] visited = new boolean[N+1];
+    public static void dijkstra(int start) {
+        boolean[] visited = new boolean[N + 1];
         PriorityQueue<Node> pQueue = new PriorityQueue<>();
 
-        Arrays.fill(distance,300000000);
-        distance[start] = 0;
-        pQueue.offer(new Node(start,distance[start]));
-        while(!pQueue.isEmpty()){
+
+        minDis[start] = 0;
+        pQueue.offer(new Node(start, minDis[start]));
+        while (!pQueue.isEmpty()) {
             Node current = pQueue.poll();
 
-            if (shopCity.contains(current.num)){
-                minDis[start] = distance[current.num];
-                return;
-            }
-            if (visited[current.num])continue;
+            if (minDis[current.num] < current.len) continue;
+
+            if (visited[current.num]) continue;
             visited[current.num] = true;
 
-            for (Node next : nodeList[current.num]){
-                if(!visited[next.num] && distance[next.num] > current.len + next.len){
-                    distance[next.num] = current.len + next.len;
-                    pQueue.offer(new Node(next.num,distance[next.num]));
+            for (Node node : nodeList[current.num]) {
+                if (!visited[node.num] && minDis[node.num] > minDis[current.num] + node.len) {
+                    minDis[node.num] = minDis[current.num] + node.len;
+                    pQueue.offer(new Node(node.num, minDis[node.num]));
                 }
             }
         }
