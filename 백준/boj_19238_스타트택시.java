@@ -6,19 +6,12 @@ import java.io.IOException;
 import java.util.*;
 public class boj_19238_스타트택시 {
     public static int[][] map;
-    public static int N, M, K;
-    public static Queue<Taxi> queue;
+    public static int N, M, fuel,use;
+    public static boolean impossible;
+    public static Queue<Point> queue;
     public static Map<Point,Point> goalMap;
     public static int[] dr = {0,0,1,-1};
     public static int[] dc = {1,-1,0,0};
-    public static class Taxi{
-        int r,c,fuel;
-        public Taxi(int r, int c, int fuel){
-            this.r = r;
-            this.c = c;
-            this.fuel = fuel;
-        }
-    }
     public static class Point{
         int r, c;
         public Point(int r, int c){
@@ -32,7 +25,7 @@ public class boj_19238_스타트택시 {
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        K = Integer.parseInt(st.nextToken());
+        fuel = Integer.parseInt(st.nextToken());
         map = new int[N+1][N+1];
         queue = new LinkedList<>();
         for (int r = 1; r<=N;r++){
@@ -46,7 +39,7 @@ public class boj_19238_스타트택시 {
         st = new StringTokenizer(br.readLine());
         int sr = Integer.parseInt(st.nextToken());
         int sc = Integer.parseInt(st.nextToken());
-        queue.add(new Taxi(sr,sc,K));
+        queue.add(new Point(sr,sc));
         goalMap = new HashMap<>();
 
         for (int i = 1; i<=M;i++){
@@ -63,28 +56,47 @@ public class boj_19238_스타트택시 {
 
         for (int i = 1; i<=M;i++){
             Point goal = findPassenger();
+            if (impossible || goal.r == 0){
+                System.out.println(-1);
+                return;
+            }
+
+
             findGoal(goal);
+            if (impossible){
+                System.out.println(-1);
+                return;
+            }
+        }
+
+        if (!impossible){
+            System.out.println(fuel);
         }
     }
 
     public static Point findPassenger(){
         Point passenger = new Point(0,0);
-        Taxi start = queue.peek();
+        Point start = queue.peek();
         boolean[][] visited = new boolean[N+1][N+1];
         visited[start.r][start.c] = true;
-        int number = M+1;
-        int fuel = 0;
+        use = 0;
         while(!queue.isEmpty()){
             int size = queue.size();
             for (int s = 0;s<size;s++){
-                Taxi current = queue.poll();
+                Point current = queue.poll();
 
+                if(map[current.r][current.c] != 0){
+                    if(passenger.r == 0 && passenger.c == 0){
+                        passenger.r = current.r;
+                        passenger.c = current.c;
+                    }else if(passenger.r > current.r){
+                        passenger.r = current.r;
+                        passenger.c = current.c;
+                    }else if(passenger.r == current.r && passenger.c > current.c){
+                        passenger.r = current.r;
+                        passenger.c = current.c;
+                    }
 
-                if(map[current.r][current.c] != 0 && number > map[current.r][current.c]){
-                    number = map[current.r][current.c];
-                    passenger.r = current.r;
-                    passenger.c = current.c;
-                    fuel = current.fuel;
                 }
 
 
@@ -93,26 +105,80 @@ public class boj_19238_스타트택시 {
                     int nc = current.c+dc[d];
                     if(nr < 1 || nr > N || nc < 1 || nc > N || visited[nr][nc] || map[nr][nc] == -1) continue;
 
-                    if(current.fuel-1 < 0) continue;
-
-                    queue.add(new Taxi(nr,nc,current.fuel-1));
+                    queue.add(new Point(nr,nc));
                     visited[nr][nc] = true;
                 }
             }
 
-            if(number != M+1){
+            if(passenger.r != 0 || passenger.c != 0){
+
                 map[passenger.r][passenger.c] = 0;
                 queue.clear();
-                queue.add(new Taxi(passenger.r, passenger.c, fuel));
+                queue.add(new Point(passenger.r, passenger.c));
                 break;
+            }
+
+            fuel--;
+
+            if(fuel < 0){
+                impossible = true;
+                return null;
+            }
+        }
+
+        if (passenger.r == 0 && passenger.c == 0){
+            impossible = true;
+            return null;
+        }
+
+
+
+        Point goal = new Point(0,0);
+        for (Point key : goalMap.keySet()){
+            if (key.r == passenger.r && key.c == passenger.c){
+                goal = goalMap.get(key);
             }
         }
 
 
-        return goalMap.get(passenger);
+        return goal;
     }
 
     public static void findGoal(Point goal){
+        Point start = queue.peek();
+        boolean[][] visited = new boolean[N+1][N+1];
+        visited[start.r][start.c] = true;
+        use = 0;
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            for (int s = 0;s<size;s++){
+                Point current = queue.poll();
 
+                if(current.r == goal.r && current.c == goal.c){
+                    queue.clear();
+                    queue.add(new Point(current.r, current.c));
+                    fuel = fuel + (use * 2);
+                    return;
+                }
+
+                for (int d = 0; d<4;d++){
+                    int nr = current.r+dr[d];
+                    int nc = current.c+dc[d];
+                    if(nr < 1 || nr > N || nc < 1 || nc > N || visited[nr][nc] || map[nr][nc] == -1) continue;
+
+                    queue.add(new Point(nr,nc));
+                    visited[nr][nc] = true;
+                }
+            }
+
+            fuel--;
+            use++;
+            if(fuel < 0){
+                impossible = true;
+                return;
+            }
+        }
+
+        impossible = true;
     }
 }
