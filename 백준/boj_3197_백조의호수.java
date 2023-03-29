@@ -8,8 +8,9 @@ import java.util.*;
 public class boj_3197_백조의호수 {
     public static int R,C;
     public static char[][] map;
-    public static Point start,end;
-    public static boolean isPossible;
+    public static Queue<Point> iceQ;
+    public static Queue<Point> swanQ;
+    public static boolean[][] iceVisit, swanVisit;
     public static int[] dr = {0,0,1,-1};
     public static int[] dc = {1,-1,0,0};
     public static class Point{
@@ -27,88 +28,133 @@ public class boj_3197_백조의호수 {
         C = Integer.parseInt(st.nextToken());
 
         map = new char[R+1][C+1];
-        start = new Point(0,0);
-        end = new Point(0,0);
+        swanQ = new LinkedList<>();
+        iceQ = new LinkedList<>();
+        iceVisit = new boolean[R+1][C+1];
+        swanVisit = new boolean[R+1][C+1];
         for (int r = 1; r<=R;r++){
             String input = br.readLine();
             for (int c = 1; c<=C;c++){
                 map[r][c] = input.charAt(c-1);
-                if(start.r == 0 && map[r][c] == 'L') {
-                    start = new Point(r,c);
-                }else if(start.r != 0 && map[r][c] == 'L'){
-                    end = new Point(r,c);
+                if(swanQ.isEmpty() && map[r][c] == 'L'){
+                    swanQ.add(new Point(r,c));
+                    swanVisit[r][c] = true;
+                    map[r][c] = '.';
                 }
             }
         }
 
-
-        int time = 0;
-        while(true){
-            BFS();
-
-            if(isPossible){
-                break;
-            }
-
-            melt();
-
-            time++;
-        }
-
-
-        System.out.println(time);
-    }
-
-    public static void melt(){
-        List<Point> iceList = new ArrayList<>();
-
         for (int r = 1; r<=R;r++){
             for (int c = 1; c<=C;c++){
-                if(map[r][c] != 'X') continue;
-                for (int d = 0;d<4;d++){
+                if (map[r][c] != 'X') continue;
+                for (int d = 0; d<4;d++){
                     int nr = r+dr[d];
                     int nc = c+dc[d];
-                    if (nr < 1 || nr > R || nc < 1|| nc > C) continue;
-
-                    if(map[nr][nc] == '.'){
-                        iceList.add(new Point(r,c));
+                    if (nr < 1 || nr >R || nc < 1|| nc >C) continue;
+                    if (map[nr][nc] != 'X'){
+                        iceQ.add(new Point(r,c));
+                        iceVisit[r][c] = true;
                         break;
                     }
                 }
             }
         }
 
-        for (Point ice : iceList){
-            map[ice.r][ice.c] = '.';
+        solve();
+
+
+
+
+    }
+    public static void solve(){
+        int time = 0;
+        if(findSwan()){
+            System.out.println(time);
+            return;
+        }
+        while(!iceQ.isEmpty()){
+
+            int size = iceQ.size();
+
+            for (int s = 0; s<size;s++){
+                Point current = iceQ.poll();
+
+//                System.out.println("r:"+current.r + " c:"+current.c);
+
+
+                map[current.r][current.c] = '.';
+
+                for (int d = 0;d<4;d++){
+                    int nr = current.r+dr[d];
+                    int nc = current.c+dc[d];
+                    if (nr < 1 || nr >R || nc < 1|| nc >C || iceVisit[nr][nc] || map[nr][nc] != 'X') continue;
+
+                    iceQ.add(new Point(nr,nc));
+                    iceVisit[nr][nc] = true;
+                }
+
+            }
+
+
+            time++;
+
+            if(findSwan()){
+                System.out.println(time);
+                return;
+            }
         }
     }
 
-    public static void BFS(){
-        Queue<Point> queue = new LinkedList<>();
-        queue.add(start);
-        boolean[][] visited = new boolean[R+1][C+1];
-        visited[start.r][start.c] = true;
+    public static boolean findSwan(){
+        List<Point> swanList = new ArrayList<>();
+        while(!swanQ.isEmpty()){
+            int size = swanQ.size();
 
-        while(!queue.isEmpty()){
-            int size = queue.size();
             for (int s = 0; s<size;s++){
-                Point current = queue.poll();
+                Point current = swanQ.poll();
 
-
-                if(current.r == end.r && current.c == end.c){
-                    isPossible = true;
-                    return;
+                boolean iceCheck = false;
+                if(map[current.r][current.c] == 'L'){
+                    return true;
                 }
 
                 for (int d = 0; d<4;d++){
                     int nr = current.r+dr[d];
                     int nc = current.c+dc[d];
+                    if(nr < 1 || nr > R || nc < 1 || nc > C || swanVisit[nr][nc]) continue;
 
-                    if(nr < 1 || nr > R || nc <1 || nc > C || visited[nr][nc] || map[nr][nc] == 'X') continue;
-                    queue.add(new Point(nr,nc));
-                    visited[nr][nc] = true;
+                    if(map[nr][nc] == 'X'){
+                        iceCheck = true;
+                        continue;
+                    }
+
+                    //얼음을 만났을 때 다시 저장하도록 구현
+                    swanQ.add(new Point(nr,nc));
+                    swanVisit[nr][nc] = true;
+                }
+
+                if (iceCheck){
+                    swanList.add(current);
                 }
             }
         }
+
+        for (Point swan : swanList){
+            swanQ.add(swan);
+        }
+
+        return false;
     }
+
+
+    public static void print(){
+        for (int r = 1; r<=R;r++){
+            for (int c = 1; c<=C;c++){
+                System.out.print(map[r][c]+" ");
+            }
+            System.out.println();
+        }
+    }
+
+
 }
