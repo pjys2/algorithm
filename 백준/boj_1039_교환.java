@@ -46,7 +46,7 @@ public class boj_1039_교환 {
 
             for (int s = 0; s<size;s++){
                 int current = queue.poll();
-                System.out.println(current);
+
                 if(cnt == K){
                     ans = Math.max(ans, current);
                     continue;
@@ -87,6 +87,7 @@ public class boj_1039_교환 {
                         if (visited[next][cnt+1]) continue;
 
                         if(check){
+
                             queue.add(next);
                             visited[next][cnt+1] = true;
                         }
@@ -99,10 +100,10 @@ public class boj_1039_교환 {
         }
 
 
-        if(cnt == K){
-            System.out.println(ans);
-        }else{
+        if(ans == 0){
             System.out.println(-1);
+        }else{
+            System.out.println(ans);
         }
     }
 }
