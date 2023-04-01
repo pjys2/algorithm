@@ -38,16 +38,18 @@ public class boj_1039_교환 {
         Queue<Integer> queue = new LinkedList<>();
         queue.add(N);
         Set<Integer> visitSet = new HashSet<>();
-        visitSet.add(N);
+        boolean[][] visited = new boolean[1000001][K+1];
+        visited[N][0] = true;
         int cnt = 0;
         while(!queue.isEmpty()){
             int size = queue.size();
 
             for (int s = 0; s<size;s++){
                 int current = queue.poll();
-
+                System.out.println(current);
                 if(cnt == K){
                     ans = Math.max(ans, current);
+                    continue;
                 }
 
 
@@ -66,6 +68,7 @@ public class boj_1039_교환 {
                         if(i == j) continue;
                         int next = 0;
                         boolean check = true;
+
                         idx = 1;
                         for (int k = len-1; k>=0;k--){
                             if(k==i){
@@ -81,10 +84,11 @@ public class boj_1039_교환 {
                             idx = idx * 10;
                         }
 
-                        if (visitSet.contains(next)) continue;
+                        if (visited[next][cnt+1]) continue;
 
                         if(check){
                             queue.add(next);
+                            visited[next][cnt+1] = true;
                         }
                     }
                 }
