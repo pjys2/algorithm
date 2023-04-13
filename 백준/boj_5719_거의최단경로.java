@@ -8,7 +8,8 @@ import java.util.*;
 public class boj_5719_거의최단경로 {
     public static int N, M,S,D,minDis;
     public static List<Node>[] nodeList;
-    public static Set<Node> minSet;
+
+    public static int[] distance;
     public static class Node implements Comparable<Node>{
         int num, len;
 
@@ -35,7 +36,8 @@ public class boj_5719_거의최단경로 {
             st = new StringTokenizer(br.readLine());
 
             nodeList = new List[N];
-            minSet = new HashSet<>();
+            distance = new int[N];
+
 
             for (int i = 0; i<N;i++){
                 nodeList[i] = new ArrayList<>();
@@ -57,9 +59,12 @@ public class boj_5719_거의최단경로 {
                 System.out.println(-1);
                 continue;
             }
+//            System.out.println("최단거리 : "+minDis);
 
             //최단 경로인 것 찾아서 minSet에 기록함
-            DFS(S,0,new boolean[N]);
+            boolean[] visited = new boolean[N];
+            visited[S] = true;
+            DFS(S,0,visited);
 
 
             //거의 최단 경로 찾기
@@ -79,27 +84,22 @@ public class boj_5719_거의최단경로 {
         boolean[] visited = new boolean[N];
         visited[S] = true;
 
-        int[] distance = new int[N];
         Arrays.fill(distance,999999999);
-
         distance[S] = 0;
 
         while(!pq.isEmpty()){
             Node current = pq.poll();
+//            System.out.println(current.num+" "+current.len);
+            visited[current.num] = true;
 
             if(current.num == D){
                 return current.len;
             }
 
             for (Node next : nodeList[current.num]){
-                if (minSet.contains(next)) {
-                    System.out.println("해시" + current.num +" "+next.num+" "+next.len);
-                    continue;
-                }
                 if(!visited[next.num] && distance[next.num] > current.len + next.len){
                     distance[next.num] = current.len + next.len;
                     pq.add(new Node(next.num,distance[next.num]));
-                    visited[next.num] = true;
                 }
             }
         }
@@ -111,16 +111,24 @@ public class boj_5719_거의최단경로 {
         if(current == D && len == minDis){
             return true;
         }
-        visited[current] = true;
+
+        List<Node> delList = new ArrayList<>();
 
         boolean check = false;
         for(Node next : nodeList[current]){
-//            if(minSet.contains(next)) continue;
-            if(!visited[next.num] && DFS(next.num, len+next.len,visited)){
-                minSet.add(next);
+
+            if(visited[next.num]) continue;
+
+            visited[next.num] = true;
+            if(DFS(next.num, len+next.len,visited)){
+//                System.out.println("경로"+current+" "+next.num+" "+next.len);
+                delList.add(next);
                 check = true;
             }
+            visited[next.num] = false;
         }
+
+        nodeList[current].removeAll(delList);
 
         return check;
     }
