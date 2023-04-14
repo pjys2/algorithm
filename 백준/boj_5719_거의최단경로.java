@@ -8,8 +8,7 @@ import java.util.*;
 public class boj_5719_거의최단경로 {
     public static int N, M,S,D,minDis;
     public static List<Node>[] nodeList;
-
-    public static int[] distance;
+    public static Set<Node> minSet;
     public static class Node implements Comparable<Node>{
         int num, len;
 
@@ -36,8 +35,7 @@ public class boj_5719_거의최단경로 {
             st = new StringTokenizer(br.readLine());
 
             nodeList = new List[N];
-            distance = new int[N];
-
+            minSet = new HashSet<>();
 
             for (int i = 0; i<N;i++){
                 nodeList[i] = new ArrayList<>();
@@ -84,7 +82,9 @@ public class boj_5719_거의최단경로 {
         boolean[] visited = new boolean[N];
         visited[S] = true;
 
+        int[] distance = new int[N];
         Arrays.fill(distance,999999999);
+
         distance[S] = 0;
 
         while(!pq.isEmpty()){
@@ -97,6 +97,10 @@ public class boj_5719_거의최단경로 {
             }
 
             for (Node next : nodeList[current.num]){
+                if (minSet.contains(next)) {
+//                    System.out.println("해시" + current.num +" "+next.num+" "+next.len);
+                    continue;
+                }
                 if(!visited[next.num] && distance[next.num] > current.len + next.len){
                     distance[next.num] = current.len + next.len;
                     pq.add(new Node(next.num,distance[next.num]));
@@ -112,25 +116,22 @@ public class boj_5719_거의최단경로 {
             return true;
         }
 
-        List<Node> delList = new ArrayList<>();
-
         boolean check = false;
         for(Node next : nodeList[current]){
-
+            if(minSet.contains(next)) continue;
             if(visited[next.num]) continue;
 
             visited[next.num] = true;
             if(DFS(next.num, len+next.len,visited)){
 //                System.out.println("경로"+current+" "+next.num+" "+next.len);
-                delList.add(next);
+                minSet.add(next);
                 check = true;
             }
             visited[next.num] = false;
         }
 
-        nodeList[current].removeAll(delList);
-
         return check;
     }
+
 
 }
