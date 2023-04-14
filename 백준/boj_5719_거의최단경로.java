@@ -8,7 +8,11 @@ import java.util.*;
 public class boj_5719_거의최단경로 {
     public static int N, M,S,D,minDis;
     public static List<Node>[] nodeList;
+    public static List<Node>[] revList;
     public static Set<Node> minSet;
+
+    public static int[] distance;
+    public static int[] revDis;
     public static class Node implements Comparable<Node>{
         int num, len;
 
@@ -35,10 +39,16 @@ public class boj_5719_거의최단경로 {
             st = new StringTokenizer(br.readLine());
 
             nodeList = new List[N];
+            distance = new int[N];
+
+            revList = new List[N];
+            revDis = new int[N];
+
             minSet = new HashSet<>();
 
             for (int i = 0; i<N;i++){
                 nodeList[i] = new ArrayList<>();
+                revList[i] = new ArrayList<>();
             }
 
             S = Integer.parseInt(st.nextToken());
@@ -50,8 +60,10 @@ public class boj_5719_거의최단경로 {
                 int v = Integer.parseInt(st.nextToken());
                 int p = Integer.parseInt(st.nextToken());
                 nodeList[u].add(new Node(v,p));
+                revList[v].add(new Node(u,p));
             }
 
+            //시작지점부터 출발지점까지 최소거리 찾기
             minDis = dijkstra();
             if (minDis == 0){
                 System.out.println(-1);
@@ -59,10 +71,11 @@ public class boj_5719_거의최단경로 {
             }
 //            System.out.println("최단거리 : "+minDis);
 
+            //역방향 dijkstra
+            reverse();
+
             //최단 경로인 것 찾아서 minSet에 기록함
-            boolean[] visited = new boolean[N];
-            visited[S] = true;
-            DFS(S,0,visited);
+            findLoad();
 
 
             //거의 최단 경로 찾기
@@ -82,9 +95,7 @@ public class boj_5719_거의최단경로 {
         boolean[] visited = new boolean[N];
         visited[S] = true;
 
-        int[] distance = new int[N];
         Arrays.fill(distance,999999999);
-
         distance[S] = 0;
 
         while(!pq.isEmpty()){
@@ -97,10 +108,12 @@ public class boj_5719_거의최단경로 {
             }
 
             for (Node next : nodeList[current.num]){
+
                 if (minSet.contains(next)) {
-//                    System.out.println("해시" + current.num +" "+next.num+" "+next.len);
+//                    System.out.println("최단경로" + current.num +" "+next.num+" "+next.len);
                     continue;
                 }
+
                 if(!visited[next.num] && distance[next.num] > current.len + next.len){
                     distance[next.num] = current.len + next.len;
                     pq.add(new Node(next.num,distance[next.num]));
@@ -111,26 +124,53 @@ public class boj_5719_거의최단경로 {
         return 0;
     }
 
-    public static boolean DFS(int current, int len, boolean[] visited){
-        if(current == D && len == minDis){
-            return true;
-        }
+    public static void findLoad(){
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(new Node(S,0));
+        boolean[][] visited = new boolean[N][N];
 
-        boolean check = false;
-        for(Node next : nodeList[current]){
-            if(minSet.contains(next)) continue;
-            if(visited[next.num]) continue;
+        while(!queue.isEmpty()){
+            Node current = queue.poll();
 
-            visited[next.num] = true;
-            if(DFS(next.num, len+next.len,visited)){
-//                System.out.println("경로"+current+" "+next.num+" "+next.len);
-                minSet.add(next);
-                check = true;
+            for (Node next : nodeList[current.num]){
+                if (current.len + next.len > distance[next.num] || visited[current.num][next.num]) continue;
+
+                int lenSum = revDis[next.num] + current.len + next.len;
+
+                if (lenSum == minDis){
+//                    System.out.println("최단경로" + current.num +" "+next.num+" "+next.len);
+                    minSet.add(next);
+                    queue.add(new Node(next.num, current.len + next.len));
+                    visited[current.num][next.num] = true;
+                }
             }
-            visited[next.num] = false;
+        }
+    }
+
+    public static void reverse(){
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(D,0));
+        boolean[] visited = new boolean[N];
+        visited[D] = true;
+
+        Arrays.fill(revDis,999999999);
+        revDis[D] = 0;
+
+        while(!pq.isEmpty()){
+            Node current = pq.poll();
+//            System.out.println(current.num+" "+current.len);
+            visited[current.num] = true;
+
+            if (current.num == S) return;
+
+            for (Node next : revList[current.num]){
+                if(!visited[next.num] && revDis[next.num] > current.len + next.len){
+                    revDis[next.num] = current.len + next.len;
+                    pq.add(new Node(next.num,revDis[next.num]));
+                }
+            }
         }
 
-        return check;
     }
 
 
