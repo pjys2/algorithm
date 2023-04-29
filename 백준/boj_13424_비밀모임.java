@@ -6,21 +6,9 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class boj_13424_비밀모임 {
-    public static int T, N, M,K,ans,ansLen;
+    public static int T, N, M,K;
     public static int[] room;
-    public static List<Node>[] nodeList;
-    public static class Node implements Comparable<Node>{
-        int num, len;
-        public Node(int num, int len){
-            this.num = num;
-            this.len = len;
-        }
-
-        @Override
-        public int compareTo(Node o) {
-            return this.len - o.len;
-        }
-    }
+    public static int[][] nodeMat;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -31,12 +19,13 @@ public class boj_13424_비밀모임 {
             StringTokenizer st = new StringTokenizer(br.readLine());
             N = Integer.parseInt(st.nextToken());
             M = Integer.parseInt(st.nextToken());
-            ansLen = Integer.MAX_VALUE;
-            ans = 0;
-            nodeList = new List[N+1];
+            nodeMat = new int[N+1][N+1];
 
-            for (int i = 1;i<=N;i++){
-                nodeList[i] = new ArrayList<>();
+
+
+            for (int i = 1; i<=N;i++){
+                Arrays.fill(nodeMat[i],999999999);
+                nodeMat[i][i] = 0;
             }
 
             for (int i = 1;i<=M;i++){
@@ -44,8 +33,8 @@ public class boj_13424_비밀모임 {
                 int a = Integer.parseInt(st.nextToken());
                 int b = Integer.parseInt(st.nextToken());
                 int c = Integer.parseInt(st.nextToken());
-                nodeList[a].add(new Node(b,c));
-                nodeList[b].add(new Node(a,c));
+                nodeMat[a][b] = c;
+                nodeMat[b][a] = c;
             }
 
             K = Integer.parseInt(br.readLine());
@@ -58,48 +47,48 @@ public class boj_13424_비밀모임 {
                 room[i] = roomNum;
             }
 
-            for (int i = 1; i<=N;i++){
-                dijkstra(i);
+            for (int k = 1; k<=N;k++){
+                for (int i = 1; i<=N;i++){
+                    for (int j = 1; j<=N;j++){
+                        if (nodeMat[i][j] > nodeMat[i][k] + nodeMat[k][j]){
+                            nodeMat[i][j] = nodeMat[i][k] + nodeMat[k][j];
+                        }
+                    }
+                }
+            }
+
+//            print();
+            int ans = 0;
+            int ansLen = 999999999;
+            for (int i =1;i<=N;i++){
+                int sum = 0;
+                for (int j = 1; j<=K;j++){
+                    sum += nodeMat[i][room[j]];
+                }
+
+                if (ansLen > sum){
+                    ansLen = sum;
+                    ans = i;
+
+                }else if(ansLen == sum && ans > i){
+                    ansLen = sum;
+                    ans = i;
+
+                }
             }
 
             System.out.println(ans);
+
+
         }
     }
 
-    public static void dijkstra(int start){
-        PriorityQueue<Node> pq = new PriorityQueue<>();
-        pq.add(new Node(start,0));
-
-
-//        int bitMask = 0;
-        int[] distance = new int[N+1];
-        Arrays.fill(distance,Integer.MAX_VALUE);
-
-        while(!pq.isEmpty()){
-            Node current = pq.poll();
-
-
-            if (distance[current.num] < current.len) continue;
-
-            for(Node next : nodeList[current.num]){
-                if (distance[next.num] >= current.len + next.len){
-                    pq.add(new Node(next.num,current.len + next.len));
-                    distance[next.num] = current.len + next.len;
-                }
+    public static void print(){
+        for (int i = 1;i<=N;i++){
+            for (int j = 1;j<=N;j++){
+                System.out.print(nodeMat[i][j]+" ");
             }
-        }
-
-        int sum = 0;
-        for (int i = 1; i<=K;i++){
-            sum += distance[room[i]];
-        }
-
-        if (ansLen > sum){
-            ansLen = sum;
-            ans = start;
-        }else if(ansLen == sum && ans > start){
-            ansLen = sum;
-            ans = start;
+            System.out.println();
         }
     }
 }
