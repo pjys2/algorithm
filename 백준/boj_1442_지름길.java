@@ -30,9 +30,9 @@ public class boj_1442_지름길 {
         N = Integer.parseInt(st.nextToken());
         D = Integer.parseInt(st.nextToken());
 
-        nodeList = new List[10001];
+        nodeList = new List[D+1];
 
-        for (int i = 0; i<=10000;i++){
+        for (int i = 0; i<=D;i++){
             nodeList[i] = new ArrayList<>();
             if (i < D){
                 nodeList[i].add(new Node(i+1,1));
@@ -44,6 +44,7 @@ public class boj_1442_지름길 {
             int s = Integer.parseInt(st.nextToken());
             int e = Integer.parseInt(st.nextToken());
             int l = Integer.parseInt(st.nextToken());
+            if (s > D || e > D) continue;
             nodeList[s].add(new Node(e,l));
         }
 
@@ -54,7 +55,7 @@ public class boj_1442_지름길 {
     public static void dijkstra(){
         PriorityQueue<Node>pq = new PriorityQueue<>();
         pq.add(new Node(0,0));
-        boolean[] visited = new boolean[10001];
+        boolean[] visited = new boolean[D+1];
         visited[0] = true;
         while (!pq.isEmpty()){
             Node current = pq.poll();
@@ -64,7 +65,11 @@ public class boj_1442_지름길 {
                 return;
             }
 
+            visited[current.num] = true;
+
             for (Node next : nodeList[current.num]){
+                if (next.num > D) continue;
+
                 if (!visited[next.num]){
                     pq.add(new Node(next.num, current.len + next.len));
                 }
