@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 public class boj_1445_일요일아침의데이트 {
     public static int N, M;
-    public static int[][] map;
+    public static char[][] map;
     public static Point start, end;
     public static int[] dr = {0,0,1,-1};
     public static int[] dc = {1,-1,0,0};
@@ -36,23 +36,24 @@ public class boj_1445_일요일아침의데이트 {
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        map = new int[N][M];
+        map = new char[N][M];
 
         for (int r = 0; r<N;r++){
             String input = br.readLine();
             for (int c = 0; c<M;c++){
-                char ch = input.charAt(c);
-                if (ch == 'S'){
+                map[r][c] = input.charAt(c);
+                if (map[r][c] == 'S'){
                     start = new Point(r,c,0,0);
-                }else if(ch == 'F'){
+                }else if(map[r][c] == 'F'){
                     end = new Point(r,c,0,0);
-                }else if (ch == 'g'){
-                    map[r][c] = 5;
+                }else if (map[r][c] == 'g'){
                     for (int d = 0; d<4;d++){
                         int nr = r+dr[d];
                         int nc = c+dc[d];
                         if (nr < 0 || nr >= N || nc < 0 || nc >= M) continue;
-                        map[nr][nc]++;
+                        if (map[nr][nc] == '.'){
+                            map[nr][nc] = '1';
+                        }
                     }
                 }
             }
@@ -65,44 +66,32 @@ public class boj_1445_일요일아침의데이트 {
         PriorityQueue<Point> pq = new PriorityQueue<>();
         pq.add(start);
 
-        int[][] distance = new int[N][M];
-        for (int i =0;i<N;i++){
-            Arrays.fill(distance[i],999999999);
-        }
-
-        distance[start.r][start.c] = 0;
-
+        boolean[][] visited = new boolean[N][M];
+        visited[start.r][start.c] = true;
         while(!pq.isEmpty()){
             Point current = pq.poll();
-//            System.out.println(current.r+" "+current.c+" "+current.g+" "+current.gs);
-            if (current.r == end.r && current.c == end.c){
-                System.out.println(current.g+" "+current.gs);
-                return;
-            }
-
-            if (distance[current.r][current.c] < current.g) continue;
 
             for (int d = 0; d<4;d++){
                 int nr = current.r+dr[d];
                 int nc = current.c+dc[d];
 
-                if (nr < 0 || nr >= N || nc < 0 || nc >= M) continue;
-
-
-                if (map[nr][nc] >= 5){
-                    if (distance[nr][nc] < current.g + 1) continue;
-                    pq.add(new Point(nr,nc,current.g+1, current.gs));
-                    distance[nr][nc] = current.g+1;
-                }else{
-                    if (distance[nr][nc] < current.g) continue;
-                    pq.add(new Point(nr,nc,current.g, current.gs + map[nr][nc]));
-                    distance[nr][nc] = current.g;
+                if (nr < 0 || nr >= N || nc < 0 || nc >= M || visited[nr][nc]){
+                    continue;
                 }
-
-
-
+                visited[nr][nc] = true;
+                if (map[nr][nc] == 'g'){
+                    pq.add(new Point(nr,nc,current.g+1, current.gs));
+                }else if (map[nr][nc] == '1'){
+                    pq.add(new Point(nr,nc,current.g, current.gs + 1));
+                }else if(map[nr][nc] == 'F'){
+                    System.out.println(current.g +" "+current.gs);
+                    return;
+                }else{
+                    pq.add(new Point(nr,nc,current.g, current.gs));
+                }
             }
         }
+
     }
 
     public static void print(){
