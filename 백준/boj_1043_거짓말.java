@@ -1,7 +1,5 @@
 package 백준;
 
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,11 +21,13 @@ public class boj_1043_거짓말 {
     public static int find(int a){
         if (parrents[a] == a) return a;
 
-        int ret = find(parrents[a]);
-
         if (people[a]){
             people[parrents[a]] = true;
         }
+
+
+        int ret = find(parrents[a]);
+
 
         if (people[parrents[a]]){
             people[a] = true;
@@ -38,12 +38,14 @@ public class boj_1043_거짓말 {
 
     public static void union(int a, int b){
 
-        int parrentB = find(b);
-
         if (people[a]) people[b] = true;
         if (people[b]) people[a] = true;
 
-        parrents[parrentB] = a;
+        int parrentB = find(b);
+        int parrentA = find(a);
+
+
+        parrents[parrentB] = parrentA;
     }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -93,8 +95,8 @@ public class boj_1043_거짓말 {
 
         int ans = 0;
 
-        System.out.println(Arrays.toString(parrents));
-        System.out.println(Arrays.toString(people));
+//        System.out.println(Arrays.toString(parrents));
+//        System.out.println(Arrays.toString(people));
         for (int i = 1; i<=M;i++){
             boolean isPossible = true;
             for (int p : partyList[i]){
