@@ -41,11 +41,13 @@ public class boj_1043_거짓말 {
         if (people[a]) people[b] = true;
         if (people[b]) people[a] = true;
 
-        int parrentB = find(b);
+
         int parrentA = find(a);
+        int parrentB = find(b);
 
 
-        parrents[parrentB] = parrentA;
+
+        parrents[parrentB] = a;
     }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
