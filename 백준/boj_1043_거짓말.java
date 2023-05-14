@@ -21,33 +21,19 @@ public class boj_1043_거짓말 {
     public static int find(int a){
         if (parrents[a] == a) return a;
 
-        if (people[a]){
-            people[parrents[a]] = true;
-        }
-
-
-        int ret = find(parrents[a]);
-
-
-        if (people[parrents[a]]){
-            people[a] = true;
-        }
-
-        return ret;
+        return find(parrents[a]);
     }
 
     public static void union(int a, int b){
-
-        if (people[a]) people[b] = true;
-        if (people[b]) people[a] = true;
-
 
         int parrentA = find(a);
         int parrentB = find(b);
 
 
+        if(parrentA != parrentB){
+            parrents[parrentB] = parrentA;
+        }
 
-        parrents[parrentB] = a;
     }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -90,8 +76,16 @@ public class boj_1043_거짓말 {
                 int b = Integer.parseInt(st.nextToken());
                 partyList[i].add(b);
                 union(a,b);
+                if (people[a]) people[parrents[a]] = true;
+                if (people[b]) people[parrents[b]] = true;
 
                 a = b;
+            }
+        }
+
+        for (int i = 1; i<=N;i++){
+            if (people[parrents[i]]){
+                people[i] = true;
             }
         }
 
