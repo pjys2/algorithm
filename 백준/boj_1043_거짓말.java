@@ -30,9 +30,7 @@ public class boj_1043_거짓말 {
         int parrentB = find(b);
 
 
-        if(parrentA != parrentB){
-            parrents[parrentB] = parrentA;
-        }
+        parrents[parrentB] = parrentA;
 
     }
     public static void main(String[] args) throws IOException {
@@ -75,19 +73,22 @@ public class boj_1043_거짓말 {
             for (int j = 1;j<num;j++){
                 int b = Integer.parseInt(st.nextToken());
                 partyList[i].add(b);
-                union(a,b);
-                if (people[a]) people[parrents[a]] = true;
-                if (people[b]) people[parrents[b]] = true;
+                if (find(a) != find(b)){
+                    union(a,b);
+                }
 
                 a = b;
             }
         }
 
+
         for (int i = 1; i<=N;i++){
-            if (people[parrents[i]]){
-                people[i] = true;
+            if (people[i]){
+                int root = find(i);
+                people[root] = true;
             }
         }
+
 
         int ans = 0;
 
@@ -96,7 +97,8 @@ public class boj_1043_거짓말 {
         for (int i = 1; i<=M;i++){
             boolean isPossible = true;
             for (int p : partyList[i]){
-                if (people[p]) {
+                int root = find(p);
+                if (people[root]) {
                     isPossible = false;
                     break;
                 }
