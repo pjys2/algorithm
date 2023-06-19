@@ -37,6 +37,7 @@ public class boj_17141_연구소2 {
                 state[r][c] = Integer.parseInt(st.nextToken());
                 if(state[r][c] == 2){
                     virus.add(new Point(r, c));
+                    state[r][c] = 0;
                 }
             }
         }
@@ -48,7 +49,6 @@ public class boj_17141_연구소2 {
     }
     public static void comb(int[] sel, int listSize,int k, int idx){
         if (k == sel.length){
-
             BFS(sel);
             return;
         }
@@ -67,8 +67,10 @@ public class boj_17141_연구소2 {
 
         copy(copyState);
 
+
         for (int i = 0; i<sel.length;i++){
             Point point = virus.get(sel[i]);
+            copyState[point.r][point.c] = 2;
             queue.add(point);
             visited[point.r][point.c] = true;
         }
